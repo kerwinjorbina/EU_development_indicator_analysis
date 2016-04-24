@@ -1,0 +1,111 @@
+---
+title: "Descriptive Statistics EU vs EEU"
+author: "Anton Yeshchenko, Kerwin Jorbina"
+date: "24 April 2016"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Descriptive statistics
+
+First, we start from looking into GDP, as the main indicator of economy growth. 
+
+```{r, echo=FALSE,include=FALSE, cache=FALSE}
+setwd("C:/Users/Anton Yeshchenko/Desktop/Data mining/project")
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(reshape)
+library(scales)
+
+dev <- read.csv("Indicators.csv")
+
+eu2004 <- c("Hungary","Slovenia","Slovak Republic","Poland","Lithuania","Latvia","Estonia","Czech Republic")
+
+eu2007 <- c("Bulgaria","Romania")
+
+ukraine <- c("Ukraine")
+
+eeu2010 <- c("Russian Federation","Belarus","Kazakhstan","Armenia","Kyrgyz Republic")
+
+```
+
+## EU countries (joined after 2004)
+
+```{r gdp, echo=FALSE}
+
+plotCountriesGDP <- function(c) {
+  compCountry <- c#countries to compare
+  countryInd <- dev %>% filter(dev$CountryName %in% compCountry) %>% select(5,2,3,4,6)
+  countryInd1 <- countryInd %>% select(1,2,4,5) %>% spread(key = IndicatorCode, value = Value)
+  titleformat <- theme(plot.title = element_text(color = "blue", size = 16, face = "bold"))
+  
+  gdp2004 <- countryInd1 %>% select(Year, CountryCode, one_of(c("NY.GDP.PCAP.PP.CD"))) %>%
+    filter(Year >=1995)
+  gdp2004
+  colnames(gdp2004)[3] <- c("GDP PPP")
+  gdp20041 <- melt(gdp2004, id = c("Year", "CountryCode"))
+  plot2 <- ggplot(gdp20041, aes(Year, value, col = CountryCode)) +
+    geom_line(size = 1.3) + 
+    facet_grid(.~variable) + 
+   # scale_y_continuous(breaks=seq(0, 20, 2))+
+    ylab("GDP numbers") +
+    ggtitle("GDP per capita, PPP") +
+    theme(axis.title.x = element_blank(),legend.justification = c(1,1), legend.position= c(0.2,1.1),legend.title=element_blank()) +
+    titleformat 
+  return(plot2)
+}
+
+plotCountriesGDP(eu2004)
+
+```
+
+## EU countries (joined after 2007) + Ukraine
+
+```{r gdp07, echo=FALSE}
+plotCountriesGDP(c(eu2007,ukraine))
+```
+
+## EEU countries
+
+
+```{r gdp-eeu, echo=FALSE}
+plotCountriesGDP(eeu2010)
+```
+
+# Now all plots on the same scale, but colored by EU2004-EU2007-EEU
+
+```{r gdp-All, echo=FALSE}
+ 
+
+```
+
+
+
+```{r unemployment, echo=FALSE}
+
+compCountry <- eu2004#countries to compare
+countryInd <- dev %>% filter(dev$CountryName %in% compCountry) %>% select(5,2,3,4,6)
+countryInd1 <- countryInd %>% select(1,2,4,5) %>% spread(key = IndicatorCode, value = Value)
+titleformat <- theme(plot.title = element_text(color = "blue", size = 16, face = "bold"))
+
+
+
+unemployment <- countryInd1 %>% select(Year, CountryCode, one_of(c("SL.UEM.TOTL.ZS", "SL.UEM.TOTL.FE.ZS", "SL.UEM.TOTL.MA.ZS"))) %>%
+  filter(Year >=1995)
+colnames(unemployment)[3:5] <- c("Total", "Female", "Male")
+unemployment1 <- melt(unemployment, id = c("Year", "CountryCode"))
+plot2 <- ggplot(unemployment1, aes(Year, value, col = CountryCode)) +
+  geom_line(size = 1.5) + 
+  facet_grid(.~variable) + 
+  scale_y_continuous(breaks=seq(0, 26, 1))+
+  ylab("Unemployment (% of total") +
+  ggtitle("UNEMPLOYMENT LEVEL") +
+  theme(axis.title.x = element_blank(),legend.justification = c(1,1), legend.position= c(1,1),legend.title=element_blank()) +
+  titleformat      
+plot2
+```
+
