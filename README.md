@@ -43,3 +43,8 @@ Areas of the city?? Hmmm(national parks?) environment
 Tourism (increase or decrease)
 
 Number of outgoing to number of ingoing (ratio)
+
+
+
+DATA used:
+https://www.kaggle.com/worldbank/world-development-indicators/scripts
