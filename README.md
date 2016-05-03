@@ -59,7 +59,8 @@ Clustering
 Time series: 
 
 - Arima models, 
-- 
 - Intervention analysis
-- 
+
 Regression
+
+Chow test
