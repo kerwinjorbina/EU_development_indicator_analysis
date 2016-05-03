@@ -50,10 +50,16 @@ DATA used:
 https://www.kaggle.com/worldbank/world-development-indicators/scripts
 
 Techniques to be used:
+
 Descriptive statistics
+
 Clustering
 
+
 Time series: 
+
 - Arima models, 
+- 
 - Intervention analysis
+- 
 Regression
