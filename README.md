@@ -64,3 +64,6 @@ Time series:
 Regression
 
 Chow test
+
+
+-- Our main result will be algorithm to calculate impact score, that is the measure of how the time event (EU, EEU joining) changed the economy
