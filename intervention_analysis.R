@@ -88,7 +88,7 @@ library(forecast)
 # so we need to make data stationary
 #in order to do that we use wide-known technique taking difference between elements in time series
 
-par(mfrow=c(2,1))
+
 #these are to find autocorrelation and autovariance to ensure that the process in not stationary
 acf(pol60_14[,3])
 pacf(pol60_14[,3])
@@ -99,16 +99,25 @@ diff_pol60_04 = diff(pol60_04[,3])
 plot(diff_y, diff_pol60_04)
 
 #try to check now
-par(mfrow=c(2,1))
 
 acf(diff_pol60_04)
 pacf(diff_pol60_04)
 
 
 #order means 1 - order of diff (for our model is 1 better?)
-#
-fit <- Arima(pol60_04[,3], order=c(0,0,3))
+# no seasonal component!
+fit <- Arima(pol60_04[,3], order=c(5,1,1))
 fit
+?Arima
+?auto.arima
+
+pol60_04[,3]
+gdp_pred = predict(fit, n.ahead = 10)
+gdp_pred$pred
+
+plot(pol60_14[,1], c(pol60_04[,3],gdp_pred$pred))
+
+
 plot(fit)
 
 gdp

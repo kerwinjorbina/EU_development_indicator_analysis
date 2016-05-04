@@ -7,9 +7,9 @@ First we can take a look at these parameters (features):
 
 Economic coefficients:  
 
-GDP
+GDP (NY.GDP.PCAP.PP.CD)
 
-Gini
+Gini (SI.POV.GINI)
 
 Big Mac index
 
