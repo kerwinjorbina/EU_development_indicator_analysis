@@ -43,3 +43,27 @@ Areas of the city?? Hmmm(national parks?) environment
 Tourism (increase or decrease)
 
 Number of outgoing to number of ingoing (ratio)
+
+
+
+DATA used:
+https://www.kaggle.com/worldbank/world-development-indicators/scripts
+
+Techniques to be used:
+
+Descriptive statistics
+
+Clustering
+
+
+Time series: 
+
+- Arima models, 
+- Intervention analysis
+
+Regression
+
+Chow test
+
+
+-- Our main result will be algorithm to calculate impact score, that is the measure of how the time event (EU, EEU joining) changed the economy
