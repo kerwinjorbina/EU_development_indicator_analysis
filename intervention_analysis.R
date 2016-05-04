@@ -73,9 +73,47 @@ plot(pol60_04[,1], pol60_04[,3])
 
 # now try the arima model 
 
+#approach from here 
+#https://www.otexts.org/fpp/8/7
+
+#install.packages("forecast")
+library(forecast)
+
+# we encounter the problem that our data is not stationary, that is the mean and variance 
+# are changing over time
+
+# that is because we can model ARIMA only on statinary data
+# (concern of this theorem) https://en.wikipedia.org/wiki/Wold's_theorem
+
+# so we need to make data stationary
+#in order to do that we use wide-known technique taking difference between elements in time series
+
+par(mfrow=c(2,1))
+#these are to find autocorrelation and autovariance to ensure that the process in not stationary
+acf(pol60_14[,3])
+pacf(pol60_14[,3])
 
 
+diff_y = pol60_04[-1,1]
+diff_pol60_04 = diff(pol60_04[,3])
+plot(diff_y, diff_pol60_04)
 
+#try to check now
+par(mfrow=c(2,1))
+
+acf(diff_pol60_04)
+pacf(diff_pol60_04)
+
+
+#order means 1 - order of diff (for our model is 1 better?)
+#
+fit <- Arima(pol60_04[,3], order=c(0,0,3))
+fit
+plot(fit)
+
+gdp
+diff(gdp)
+plot(pol60_04[-1,1], diff(gdp))
 
 
 
