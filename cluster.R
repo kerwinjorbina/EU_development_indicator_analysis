@@ -380,3 +380,74 @@ for(k in 397:440){
   cdata[k, 2] = year + k - 397
 }
 
+cdataDF = as.data.frame(cdata)
+colnames(cdataDF) = c("country", "year", "GDP", "CPI", "Unemployment", "GNI", "Household", "Trade")
+
+c("SVN", "SVK", "POL", "MLT", "LTU", "LVA", "HUN", "EST", "CZE", "CYP")
+cdataDF$GDP = as.numeric(cdataDF$GDP)
+cdataDF$CPI = as.numeric(cdataDF$CPI)
+cdataDF$Unemployment = as.numeric(cdataDF$Unemployment)
+cdataDF$GNI = as.numeric(cdataDF$GNI)
+cdataDF$Household = as.numeric(cdataDF$Household)
+cdataDF$Trade = as.numeric(cdataDF$Trade)
+for(i in 1:length(indicators)){
+  for(j in 1:nrow(cdataDF)){
+    if(sapply(cdataDF$country[j], as.character) == "SVN"){
+      ss = subset(Slovenia, Year == sapply(cdataDF$year[j], as.character) & IndicatorCode == indicators[i])
+    }
+    else if(sapply(cdataDF$country[j], as.character) == "SVK"){
+      ss = subset(Slovakia, Year == sapply(cdataDF$year[j], as.character) & IndicatorCode == indicators[i])
+    }
+    else if(sapply(cdataDF$country[j], as.character) == "POL"){
+      ss = subset(Poland, Year == sapply(cdataDF$year[j], as.character) & IndicatorCode == indicators[i])
+    }
+    else if(sapply(cdataDF$country[j], as.character) == "MLT"){
+      ss = subset(Malta, Year == sapply(cdataDF$year[j], as.character) & IndicatorCode == indicators[i])
+    }
+    else if(sapply(cdataDF$country[j], as.character) == "LTU"){
+      ss = subset(Lithuania, Year == sapply(cdataDF$year[j], as.character) & IndicatorCode == indicators[i])
+    }
+    else if(sapply(cdataDF$country[j], as.character) == "LVA"){
+      ss = subset(Latvia, Year == sapply(cdataDF$year[j], as.character) & IndicatorCode == indicators[i])
+    }
+    else if(sapply(cdataDF$country[j], as.character) == "HUN"){
+      ss = subset(Hungary, Year == sapply(cdataDF$year[j], as.character) & IndicatorCode == indicators[i])
+    }
+    else if(sapply(cdataDF$country[j], as.character) == "EST"){
+      ss = subset(Estonia, Year == sapply(cdataDF$year[j], as.character) & IndicatorCode == indicators[i])
+    }
+    else if(sapply(cdataDF$country[j], as.character) == "CZE"){
+      ss = subset(CzechRepublic, Year == sapply(cdataDF$year[j], as.character) & IndicatorCode == indicators[i])
+    }
+    else if(sapply(cdataDF$country[j], as.character) == "CYP"){
+      ss = subset(Cyprus, Year == sapply(cdataDF$year[j], as.character) & IndicatorCode == indicators[i])
+    }
+#    ss = subset(data, CountryCode == sapply(cdataDF$country[j], as.character) & Year == sapply(cdataDF$year[j], as.character) & IndicatorCode == indicators[j])
+#    if(nrow(ss) == 0)
+#      next
+    print(nrow(ss))
+    if(nrow(ss) == 0)
+      next
+      
+    if(indicators[i] == "NY.GDP.PCAP.CD"){
+      cdataDF$GDP[j] = ss$Value
+    }
+    else if(indicators[i] == "FP.CPI.TOTL.ZG"){
+      cdataDF$CPI[j] = ss$Value
+    }
+    else if(indicators[i] == "SL.UEM.TOTL.NE.ZS"){
+      cdataDF$Unemployment[j] = ss$Value
+    }
+    else if(indicators[i] == "NY.GNP.MKTP.KD.ZG"){
+      cdataDF$GNI[j] = ss$Value
+    }
+    else if(indicators[i] == "NE.CON.PRVT.PP.CD"){
+      cdataDF$Household[j] = ss$Value
+    }
+    else if(indicators[i] == "NE.TRD.GNFS.ZS"){
+      cdataDF$Trade[j] = ss$Value
+    }
+  }
+}
+
+write.csv(cdataDF, file = "countriesData.csv")
