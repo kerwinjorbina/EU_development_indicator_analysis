@@ -544,7 +544,7 @@ for(i in 1:length(countriesEU)){
   scoredata$Trade[i] = scoreTrade
 }
 
-write.csv(scoredata, file = "countriesEconomicScores.csv")
+#write.csv(scoredata, file = "countriesEconomicScores.csv")
 
 
 ukraineSS = subset(ukraine, IndicatorCode %in% indicators & Year > 1994 & Year < 2005)
@@ -603,3 +603,10 @@ for(j in 1:10){
   percentage = percentage + 0.1
 }
 scoredata[11,7] = scoreV
+clusterAll = kmeans(scoredata[,2:7], 3)
+clusterGDP = kmeans(scoredata[,2], 3)
+clusterCPI = kmeans(scoredata[,3], 3) # ukraine is an outlier here
+clusterUnemployment = kmeans(scoredata[,4], 3)
+clusterGNI = kmeans(scoredata[,5], 3)
+clusterHH = kmeans(scoredata[,6], 3)
+clusterTrade = kmeans(scoredata[,7], 3)
