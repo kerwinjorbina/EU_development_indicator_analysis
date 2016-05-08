@@ -1,13 +1,14 @@
 # internention analysis
 
-
-setwd("C:/Users/Anton Yeshchenko/Desktop/Data mining/project")
+setwd("C:/Users/Anton/Documents/Education/DataMining/Project")
+#setwd("C:/Users/Anton Yeshchenko/Desktop/Data mining/project")
 library(dplyr)
 library(tidyr)
 library(ggplot2)
 library(reshape)
 library(scales)
-
+library(forecast)
+require(hydroGOF)
 dev <- read.csv("Indicators.csv")
 head(dev)
 levels(dev$IndicatorName)
@@ -102,13 +103,15 @@ plot(diff_y, diff_pol60_04)
 
 acf(diff_pol60_04)
 pacf(diff_pol60_04)
-
-
+diff_ydiff_pol60_04
+auto.arima(pol60_04[,3], d=2, D=0)
+?auto.arima
 #order means 1 - order of diff (for our model is 1 better?)
 # no seasonal component!
-fit <- Arima(pol60_04[,3], order=c(5,1,1))
+fit <- Arima(pol60_04[,3], order=c(1,2,0))
 fit
 ?Arima
+
 ?auto.arima
 
 pol60_04[,3]
@@ -117,16 +120,89 @@ gdp_pred$pred
 
 plot(pol60_14[,1], c(pol60_04[,3],gdp_pred$pred))
 
-
 plot(fit)
 
-gdp
-diff(gdp)
-plot(pol60_04[-1,1], diff(gdp))
+#We will construct the table for one country, one feature, but with prediction and without
+#columns will look like these:
+# "Year" "Type" "Value"
 
 
 
+plotPredictedVsReal <- function(startYear, endYear, intervYear, fit, val, color_real = "blue", color_pred = "green"){
+  #startYear = 1990 
+  #endYear = 2014 
+  #intervYear = 2004 
+  #fit = fit 
+  #val=pol60_14[,3]
+  pr <- predict(fit, n.ahead = (endYear-intervYear))
+  
+  mat      <- data.frame(year=startYear:endYear, value=val)
+  mat_pred <- data.frame(year = (intervYear+1):endYear, value = pr$pred)
+  colnames(mat_pred) <- c("year", "value")
+  colnames(mat) <- c("year", "value")
+  
+  
+  ggplot()+
+    geom_line(data=mat,  aes(year,value), size=2, color=color_real)+
+    geom_line(data=mat_pred, aes(year,value),size=2,  color=color_pred)
+}
+
+plotPredictedVsReal(1990,2014,2004,fit,pol60_14[,3])
+
+getDataByIndicator <- function(country, indicator) {
+  countryInd <- dev %>% filter(dev$CountryName %in% country) %>% select(5,2,3,4,6)
+  countryInd1 <- countryInd %>% select(1,2,4,5) %>% spread(key = IndicatorCode, value = Value)
+  data <- countryInd1 %>% select(Year, CountryCode, one_of(indicator)) %>%
+    filter(Year >=1990 & Year < 2015)
+  return(data[,3])
+}
+
+giniPoland <- getDataByIndicator("Estonia", "SI.POV.GINI")
+
+
+#if the model contains missing values 
+#we use this interpretation:
+#http://stats.stackexchange.com/questions/104565/how-to-use-auto-arima-to-impute-missing-values
+#in order to estimate missing
+#becaue the ARIMA supposes that we have all data in strickt sequence
+# fit model
+fit <- auto.arima(giniPoland)
+# Kalman filter
+
+kr <- KalmanRun(giniPoland, fit$model)
+# impute missing values Z %*% alpha at each missing observation
+
+id.na <- which(is.na(giniPoland))
+for (i in id.na)
+  giniPoland[i] <- fit$model$Z %*% kr$states[i,]
 
 
 
+auto.arima(giniPoland)
+fit <- Arima(giniPoland, order=c(0,0,1))
+plotPredictedVsReal(1990,2014,2004,fit, giniPoland)
+
+
+#now find the value that will show the quantative difference between 
+#that have happened and what might have happened if there werent any intervention
+
+getInterventionCoeficient <- function(startYear, endYear, intervYear, fit, val){
+  # startYear = 1990
+  # endYear = 2014
+  # intervYear = 2004
+  # fit = fit
+  # val=giniPoland
+  pr <- predict(fit, n.ahead = (endYear-intervYear))
+  val <- tail(val,(endYear-intervYear))
+  
+  normal_factor <- max(c(pr$pred, val)) - min(c(pr$pred, val))
+  
+  interv = sum(pr$pred-val) / (normal_factor * (endYear-intervYear))
+  return(interv)
+}
+
+getInterventionCoeficient(1990,2014,2004,fit, giniPoland)
+
+
+tail(1:10,4)
 
