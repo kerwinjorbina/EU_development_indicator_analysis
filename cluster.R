@@ -383,13 +383,14 @@ for(k in 397:440){
 cdataDF = as.data.frame(cdata)
 colnames(cdataDF) = c("country", "year", "GDP", "CPI", "Unemployment", "GNI", "Household", "Trade")
 
-c("SVN", "SVK", "POL", "MLT", "LTU", "LVA", "HUN", "EST", "CZE", "CYP")
 cdataDF$GDP = as.numeric(cdataDF$GDP)
 cdataDF$CPI = as.numeric(cdataDF$CPI)
 cdataDF$Unemployment = as.numeric(cdataDF$Unemployment)
 cdataDF$GNI = as.numeric(cdataDF$GNI)
 cdataDF$Household = as.numeric(cdataDF$Household)
 cdataDF$Trade = as.numeric(cdataDF$Trade)
+yeardata = strtoi(cdataDF$year)
+cdataDF$year = as.numeric(cdataDF$year)
 for(i in 1:length(indicators)){
   for(j in 1:nrow(cdataDF)){
     if(sapply(cdataDF$country[j], as.character) == "SVN"){
@@ -450,4 +451,99 @@ for(i in 1:length(indicators)){
   }
 }
 
-write.csv(cdataDF, file = "countriesData.csv")
+#write.csv(cdataDF, file = "countriesData.csv")
+cdataDF = read.csv("countriesData.csv", header=TRUE)
+
+over94 <- cdataDF$year > 1994
+cdataDF = cdataDF[!(numNAs > 5),]
+cdataDF = cdataDF[!(over94 == FALSE),]
+
+cdataDF = cdataDF[ , !(names(cdataDF) %in% c("X"))]
+
+scoredata = matrix(, nrow = 10, ncol = 7)
+scoredata = as.data.frame(scoredata)
+colnames(scoredata) = c("country", "GDP", "CPI", "Unemployment", "GNI", "Household", "Trade")
+scoredata$country[1] = "SVN"
+scoredata$country[2] = "SVK"
+scoredata$country[3] = "POL"
+scoredata$country[4] = "MLT"
+scoredata$country[5] = "LTU"
+scoredata$country[6] = "LVA"
+scoredata$country[7] = "HUN"
+scoredata$country[8] = "EST"
+scoredata$country[9] = "CZE"
+scoredata$country[10] = "CYP"
+
+cdataDF[is.na(cdataDF)] = 0
+
+for(i in 1:length(countriesEU)){
+  scoreGDP = 0
+  scoreValues = cdataDF$GDP[cdataDF$country == countriesEU[i]]
+  percentage = 0.1
+  for(j in 1:10){
+    scoreGDP = scoreGDP + scoreValues[j]*percentage
+    percentage = percentage + 0.1
+  }
+  scoredata$GDP[i] = scoreGDP
+}
+
+for(i in 1:length(countriesEU)){
+  scoreCPI = 0
+  scoreValues = cdataDF$CPI[cdataDF$country == countriesEU[i]]
+  percentage = 0.1
+  for(j in 1:10){
+    scoreCPI = scoreCPI + scoreValues[j]*percentage
+    percentage = percentage + 0.1
+  }
+  scoredata$CPI[i] = scoreCPI
+}
+
+
+for(i in 1:length(countriesEU)){
+  scoreUnem = 0
+  scoreValues = cdataDF$Unemployment[cdataDF$country == countriesEU[i]]
+  percentage = 0.1
+  for(j in 1:10){
+    scoreUnem = scoreUnem + scoreValues[j]*percentage
+    percentage = percentage + 0.1
+  }
+  scoredata$Unemployment[i] = scoreUnem
+}
+
+
+for(i in 1:length(countriesEU)){
+  scoreGNI = 0
+  scoreValues = cdataDF$GNI[cdataDF$country == countriesEU[i]]
+  percentage = 0.1
+  for(j in 1:10){
+    scoreGNI = scoreGNI + scoreValues[j]*percentage
+    percentage = percentage + 0.1
+  }
+  scoredata$GNI[i] = scoreGNI
+}
+
+for(i in 1:length(countriesEU)){
+  scoreHH = 0
+  scoreValues = cdataDF$Household[cdataDF$country == countriesEU[i]]
+  percentage = 0.1
+  for(j in 1:10){
+    scoreHH = scoreHH + scoreValues[j]*percentage
+    percentage = percentage + 0.1
+  }
+  scoredata$Household[i] = scoreHH
+}
+
+for(i in 1:length(countriesEU)){
+  scoreTrade = 0
+  scoreValues = cdataDF$Trade[cdataDF$country == countriesEU[i]]
+  percentage = 0.1
+  for(j in 1:10){
+    scoreTrade = scoreTrade + scoreValues[j]*percentage
+    percentage = percentage + 0.1
+  }
+  scoredata$Trade[i] = scoreTrade
+}
+
+write.csv(scoredata, file = "countriesEconomicScores.csv")
+
+
