@@ -108,7 +108,7 @@ auto.arima(pol60_04[,3], d=2, D=0)
 ?auto.arima
 #order means 1 - order of diff (for our model is 1 better?)
 # no seasonal component!
-fit <- Arima(pol60_04[,3], order=c(1,2,0))
+fit <- Arima(pol60_04[,3], order=c(0,2,0))
 fit
 ?Arima
 
@@ -202,7 +202,8 @@ getInterventionCoeficient <- function(startYear, endYear, intervYear, fit, val){
 }
 
 getInterventionCoeficient(1990,2014,2004,fit, giniPoland)
-
+plotPredictedVsReal(1990,2014,2004,fit, gdp_pred$pred)
+getInterventionCoeficient(1990,2014,2004,fit, pol60_14[,3])
 
 tail(1:10,4)
 
