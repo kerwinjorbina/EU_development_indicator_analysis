@@ -547,3 +547,59 @@ for(i in 1:length(countriesEU)){
 write.csv(scoredata, file = "countriesEconomicScores.csv")
 
 
+ukraineSS = subset(ukraine, IndicatorCode %in% indicators & Year > 1994 & Year < 2005)
+ukraineGDPValues = subset(ukraineSS, ukraineSS$IndicatorCode == indicators[1])$Value
+ukraineCPIValues = subset(ukraineSS, ukraineSS$IndicatorCode == indicators[2])$Value
+ukraineUnemploymentValues = subset(ukraineSS, ukraineSS$IndicatorCode == indicators[3])$Value
+ukraineGNIValues = subset(ukraineSS, ukraineSS$IndicatorCode == indicators[4])$Value
+ukraineHHValues = subset(ukraineSS, ukraineSS$IndicatorCode == indicators[5])$Value
+ukraineTradeValues = subset(ukraineSS, ukraineSS$IndicatorCode == indicators[6])$Value
+
+scoredata[11,1] = "UKR"
+scoreV = 0
+percentage = 0.1
+for(j in 1:10){
+  scoreV = scoreV + ukraineGDPValues[j]*percentage
+  percentage = percentage + 0.1
+}
+scoredata[11,2] = scoreV
+
+scoreV = 0
+percentage = 0.1
+for(j in 1:10){
+  scoreV = scoreV + ukraineCPIValues[j]*percentage
+  percentage = percentage + 0.1
+}
+scoredata[11,3] = scoreV
+
+scoreV = 0
+percentage = 0.1
+for(j in 1:10){
+  scoreV = scoreV + ukraineUnemploymentValues[j]*percentage
+  percentage = percentage + 0.1
+}
+scoredata[11,4] = scoreV
+
+scoreV = 0
+percentage = 0.1
+for(j in 1:10){
+  scoreV = scoreV + ukraineGNIValues[j]*percentage
+  percentage = percentage + 0.1
+}
+scoredata[11,5] = scoreV
+
+scoreV = 0
+percentage = 0.1
+for(j in 1:10){
+  scoreV = scoreV + ukraineHHValues[j]*percentage
+  percentage = percentage + 0.1
+}
+scoredata[11,6] = scoreV
+
+scoreV = 0
+percentage = 0.1
+for(j in 1:10){
+  scoreV = scoreV + ukraineTradeValues[j]*percentage
+  percentage = percentage + 0.1
+}
+scoredata[11,7] = scoreV
