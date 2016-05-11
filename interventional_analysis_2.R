@@ -1,0 +1,215 @@
+#interventional analysis 2 
+
+
+
+#setwd("C:/Users/Anton/Documents/Education/DataMining/Project")
+setwd("C:/Users/Anton Yeshchenko/Desktop/Data mining/project")
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(reshape)
+library(scales)
+library(forecast)
+require(hydroGOF)
+
+data <- read.csv("Indicators.csv")
+
+
+# European Union 2004 Members
+Slovenia = subset(data, CountryCode == "SVN" & Year >= 1995)
+Slovakia = subset(data, CountryCode == "SVK" & Year >= 1995)
+Poland = subset(data, CountryCode == "POL" & Year >= 1995)
+Malta = subset(data, CountryCode == "MLT" & Year >= 1995)
+Lithuania = subset(data, CountryCode == "LTU" & Year >= 1995)
+Latvia = subset(data, CountryCode == "LVA" & Year >= 1995)
+Hungary = subset(data, CountryCode == "HUN" & Year >= 1995)
+Estonia = subset(data, CountryCode == "EST" & Year >= 1995)
+CzechRepublic = subset(data, CountryCode == "CZE" & Year >= 1995)
+Cyprus = subset(data, CountryCode == "CYP" & Year >= 1995)
+
+
+# GDP
+
+GDP.Slovenia = subset(Slovenia, IndicatorCode == "NY.GDP.PCAP.CD")
+GDP.Slovakia = subset(Slovakia, IndicatorCode == "NY.GDP.PCAP.CD")
+GDP.Poland = subset(Poland, IndicatorCode == "NY.GDP.PCAP.CD")
+GDP.Malta = subset(Malta, IndicatorCode == "NY.GDP.PCAP.CD")
+GDP.Lithuania = subset(Lithuania, IndicatorCode == "NY.GDP.PCAP.CD")
+GDP.Latvia = subset(Latvia, IndicatorCode == "NY.GDP.PCAP.CD")
+GDP.Hungary = subset(Hungary, IndicatorCode == "NY.GDP.PCAP.CD")
+GDP.Estonia = subset(Estonia, IndicatorCode == "NY.GDP.PCAP.CD")
+GDP.CzechRepublic = subset(CzechRepublic, IndicatorCode == "NY.GDP.PCAP.CD")
+GDP.Cyprus = subset(Cyprus, IndicatorCode == "NY.GDP.PCAP.CD")
+
+# Consumer Price Index
+
+CPI.Slovenia = subset(Slovenia, IndicatorCode == "FP.CPI.TOTL.ZG")
+CPI.Slovakia = subset(Slovakia, IndicatorCode == "FP.CPI.TOTL.ZG")
+CPI.Poland = subset(Poland, IndicatorCode == "FP.CPI.TOTL.ZG")
+CPI.Malta = subset(Malta, IndicatorCode == "FP.CPI.TOTL.ZG")
+CPI.Lithuania = subset(Lithuania, IndicatorCode == "FP.CPI.TOTL.ZG")
+CPI.Latvia = subset(Latvia, IndicatorCode == "FP.CPI.TOTL.ZG")
+CPI.Hungary = subset(Hungary, IndicatorCode == "FP.CPI.TOTL.ZG")
+CPI.Estonia = subset(Estonia, IndicatorCode == "FP.CPI.TOTL.ZG")
+CPI.CzechRepublic = subset(CzechRepublic, IndicatorCode == "FP.CPI.TOTL.ZG")
+CPI.Cyprus = subset(Cyprus, IndicatorCode == "FP.CPI.TOTL.ZG")
+
+# Unemployment
+UEmploy.Slovenia = subset(Slovenia, IndicatorCode == "SL.UEM.TOTL.NE.ZS")
+UEmploy.Slovakia = subset(Slovakia, IndicatorCode == "SL.UEM.TOTL.NE.ZS")
+UEmploy.Poland = subset(Poland, IndicatorCode == "SL.UEM.TOTL.NE.ZS")
+UEmploy.Malta = subset(Malta, IndicatorCode == "SL.UEM.TOTL.NE.ZS")
+UEmploy.Lithuania = subset(Lithuania, IndicatorCode == "SL.UEM.TOTL.NE.ZS")
+UEmploy.Latvia = subset(Latvia, IndicatorCode == "SL.UEM.TOTL.NE.ZS")
+UEmploy.Hungary = subset(Hungary, IndicatorCode == "SL.UEM.TOTL.NE.ZS")
+UEmploy.Estonia = subset(Estonia, IndicatorCode == "SL.UEM.TOTL.NE.ZS")
+UEmploy.CzechRepublic = subset(CzechRepublic, IndicatorCode == "SL.UEM.TOTL.NE.ZS")
+UEmploy.Cyprus = subset(Cyprus, IndicatorCode == "SL.UEM.TOTL.NE.ZS")
+
+
+# GNI
+GINI.Slovenia = subset(Slovenia, IndicatorCode == "SI.POV.GINI")
+GINI.Slovakia = subset(Slovakia, IndicatorCode == "SI.POV.GINI")
+GINI.Poland = subset(Poland, IndicatorCode == "SI.POV.GINI")
+GINI.Malta = subset(Malta, IndicatorCode == "SI.POV.GINI")
+GINI.Lithuania = subset(Lithuania, IndicatorCode == "SI.POV.GINI")
+GINI.Latvia = subset(Latvia, IndicatorCode == "SI.POV.GINI")
+GINI.Hungary = subset(Hungary, IndicatorCode == "SI.POV.GINI")
+GINI.Estonia = subset(Estonia, IndicatorCode == "SI.POV.GINI")
+GINI.CzechRepublic = subset(CzechRepublic, IndicatorCode == "SI.POV.GINI")
+GINI.Cyprus = subset(Cyprus, IndicatorCode == "SI.POV.GINI")
+
+
+# Trade
+Trade.Slovenia = subset(Slovenia, IndicatorCode == "NE.TRD.GNFS.ZS")
+Trade.Slovakia = subset(Slovakia, IndicatorCode == "NE.TRD.GNFS.ZS")
+Trade.Poland = subset(Poland, IndicatorCode == "NE.TRD.GNFS.ZS")
+Trade.Malta = subset(Malta, IndicatorCode == "NE.TRD.GNFS.ZS")
+Trade.Lithuania = subset(Lithuania, IndicatorCode == "NE.TRD.GNFS.ZS")
+Trade.Latvia = subset(Latvia, IndicatorCode == "NE.TRD.GNFS.ZS")
+Trade.Hungary = subset(Hungary, IndicatorCode == "NE.TRD.GNFS.ZS")
+Trade.Estonia = subset(Estonia, IndicatorCode == "NE.TRD.GNFS.ZS")
+Trade.CzechRepublic = subset(CzechRepublic, IndicatorCode == "NE.TRD.GNFS.ZS")
+Trade.Cyprus = subset(Cyprus, IndicatorCode == "NE.TRD.GNFS.ZS")
+
+
+# Savings
+HealthExpenditure.Slovenia = subset(Slovenia, IndicatorCode == "NY.ADJ.NNAT.CD")
+HealthExpenditure.Slovakia = subset(Slovakia, IndicatorCode == "NY.ADJ.NNAT.CD")
+HealthExpenditure.Poland = subset(Poland, IndicatorCode == "NY.ADJ.NNAT.CD")
+HealthExpenditure.Malta = subset(Malta, IndicatorCode == "NY.ADJ.NNAT.CD")
+HealthExpenditure.Lithuania = subset(Lithuania, IndicatorCode == "NY.ADJ.NNAT.CD")
+HealthExpenditure.Latvia = subset(Latvia, IndicatorCode == "NY.ADJ.NNAT.CD")
+HealthExpenditure.Hungary = subset(Hungary, IndicatorCode == "NY.ADJ.NNAT.CD")
+HealthExpenditure.Estonia = subset(Estonia, IndicatorCode == "NY.ADJ.NNAT.CD")
+HealthExpenditure.CzechRepublic = subset(CzechRepublic, IndicatorCode == "NY.ADJ.NNAT.CD")
+HealthExpenditure.Cyprus = subset(Cyprus, IndicatorCode == "NY.ADJ.NNAT.CD")
+
+countriesEU = c("SVN", "SVK", "POL", "MLT", "LTU", "LVA", "HUN", "EST", "CZE", "CYP")
+indicators =c("NY.GDP.PCAP.CD", "FP.CPI.TOTL.ZG", "SL.UEM.TOTL.NE.ZS", "NY.GNP.MKTP.KD.ZG", "NE.CON.PRVT.PP.CD", "NE.TRD.GNFS.ZS")
+
+
+
+####################################################################################
+#################
+################   Additional functions
+################
+####################################################################################
+
+#these are to find autocorrelation and autovariance to ensure that the process in not stationary
+acf(pol60_14[,3])
+pacf(pol60_14[,3])
+
+getInterventionCoeficient <- function(startYear, endYear, intervYear, fit, val){
+  pr <- predict(fit, n.ahead = (endYear-intervYear))
+  val <- tail(val,(endYear-intervYear))
+  
+  normal_factor <- max(c(pr$pred, val)) - min(c(pr$pred, val))
+  
+  interv = sum(pr$pred-val) / (normal_factor * (endYear-intervYear))
+  return(interv)
+}
+
+plotPredictedVsReal <- function(startYear, endYear, intervYear, fit, val, color_real = "blue", color_pred = "green"){
+  #startYear = 1990 
+  #endYear = 2014 
+  #intervYear = 2004 
+  #fit = fit 
+  #val=pol60_14[,3]
+  pr <- predict(fit, n.ahead = (endYear-intervYear))
+  
+  mat      <- data.frame(year=startYear:endYear, value=val)
+  mat_pred <- data.frame(year = (intervYear+1):endYear, value = pr$pred)
+  colnames(mat_pred) <- c("year", "value")
+  colnames(mat) <- c("year", "value")
+  
+  
+  ggplot()+
+    geom_line(data=mat,  aes(year,value), size=2, color=color_real)+
+    geom_line(data=mat_pred, aes(year,value),size=2,  color=color_pred)
+}
+
+
+first_year <- function(indicator) {
+  return(indicator[1,5])
+}
+last_year <- function(indicator) {
+  return(indicator[nrow(indicator),5])
+}
+
+missing_present <- function(indicator){
+  return(sum(is.na(indicator[,6])))
+}
+
+values_indicator <- function(indicator){
+  return(indicator[,6])
+}
+
+####################################################################################
+#################
+################   Additional functions END END END END
+################
+####################################################################################
+
+
+
+#Start with GDP 
+
+GDP.Slovenia 
+GDP.Slovakia  
+GDP.Poland 
+GDP.Malta  
+GDP.Lithuania
+GDP.Latvia  
+GDP.Hungary 
+GDP.Estonia
+GDP.CzechRepublic 
+GDP.Cyprus
+
+country.Slovenia.GDP.growth 
+
+
+missing_present(GDP.Poland)
+first_year(GDP.Poland)
+last_year(GDP.Poland)
+
+
+auto.arima(GDP.Poland[,6])
+fit <- Arima(pol60_04[,3], order=c(0,2,0))
+
+
+
+
+
+
+
+
+first_year(GDP.Malta)
+last_year(GDP.Malta)
+missing_present(GDP.Malta)
+
+
+
+
+
+
