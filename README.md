@@ -4,6 +4,14 @@ Data analysis of economic development of EU (especially for new countries) vs EE
 
 First we can take a look at these parameters (features):
 
+GDP +
+CPI -
+Unemployment -
+GINI (poverty) -
+Trade +
+Health expenditure per capita +
+
+
 
 Economic coefficients:  
 
