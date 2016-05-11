@@ -130,12 +130,14 @@ getInterventionCoeficient <- function(startYear, endYear, intervYear, fit, val){
   return(interv)
 }
 
+getGrowthInterventionVector <- function(startYear, endYear, intervYear, fit, val){
+  pr <- predict(fit, n.ahead = (endYear-intervYear))
+  val <- tail(val,(endYear-intervYear))
+  
+  return(rbind(c(intervYear:endYear), pr - val))
+}
+
 plotPredictedVsReal <- function(startYear, endYear, intervYear, fit, val, color_real = "blue", color_pred = "green"){
-  #startYear = 1990 
-  #endYear = 2014 
-  #intervYear = 2004 
-  #fit = fit 
-  #val=pol60_14[,3]
   pr <- predict(fit, n.ahead = (endYear-intervYear))
   
   mat      <- data.frame(year=startYear:endYear, value=val)
@@ -163,6 +165,9 @@ missing_present <- function(indicator){
 
 values_indicator <- function(indicator){
   return(indicator[,6])
+}
+values_indicator_before_intervention <- function(indicator, intervention = 2004){
+  return(subset(indicator, Year < 2004)[,6])
 }
 
 ####################################################################################
@@ -194,10 +199,9 @@ first_year(GDP.Poland)
 last_year(GDP.Poland)
 
 
-auto.arima(GDP.Poland[,6])
-fit <- Arima(pol60_04[,3], order=c(0,2,0))
-
-
+auto.arima(values_indicator_before_intervention(GDP.Poland))
+fit <- Arima(values_indicator_before_intervention(GDP.Poland), order=c(3,3,0))
+plotPredictedVsReal(first_year(GDP.Poland), last_year(GDP.Poland), 2004, fit,values_indicator(GDP.Poland) )
 
 
 
