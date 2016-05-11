@@ -88,3 +88,26 @@ country.Hungary.Health = subset(country.Hungary, IndicatorCode == "SH.XPD.PCAP")
 country.Estonia.Health = subset(country.Estonia, IndicatorCode == "SH.XPD.PCAP")
 country.CzechRepublic.Health = subset(country.CzechRepublic, IndicatorCode == "SH.XPD.PCAP")
 country.Cyprus.Health = subset(country.Cyprus, IndicatorCode == "SH.XPD.PCAP")
+
+
+# Calculate the differences in growth per year
+
+cdata = matrix(, nrow = 60, ncol = 11)
+cdataDF = as.data.frame(cdata)
+colnames(cdataDF) = c("country", "indicator", "Y1", "Y2", "Y3", "Y4", "Y5", "Y6", "Y7", "Y8", "Y9")
+countriesEU = c("SVN", "SVK", "POL", "MLT", "LTU", "LVA", "HUN", "EST", "CZE", "CYP")
+indicators = c("GDP", "CPI", "Unemployment", "GINI", "Trade", "Health")
+
+# populate countries
+for(i in 1:length(indicators)){
+  for(j in 1:length(countriesEU)){
+    cdataDF[((i-1)*10)+j,1] = countriesEU[j]
+  }
+}
+
+# populate indicators
+for(i in 1:length(indicators)){
+  for(j in 1:length(countriesEU)){
+    cdataDF[((i-1)*10)+j,2] = indicators[i]
+  }
+}
