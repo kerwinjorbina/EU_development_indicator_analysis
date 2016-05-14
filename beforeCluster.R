@@ -53,18 +53,6 @@ country.Estonia.Unemployment = subset(country.Estonia, IndicatorCode == "SL.UEM.
 country.CzechRepublic.Unemployment = subset(country.CzechRepublic, IndicatorCode == "SL.UEM.TOTL.NE.ZS")
 country.Cyprus.Unemployment = subset(country.Cyprus, IndicatorCode == "SL.UEM.TOTL.NE.ZS")
 
-# GINI
-country.Slovenia.GINI = subset(country.Slovenia, IndicatorCode == "SI.POV.GINI")
-country.Slovakia.GINI = subset(country.Slovakia, IndicatorCode == "SI.POV.GINI")
-country.Poland.GINI = subset(country.Poland, IndicatorCode == "SI.POV.GINI")
-country.Malta.GINI = subset(country.Malta, IndicatorCode == "SI.POV.GINI")
-country.Lithuania.GINI = subset(country.Lithuania, IndicatorCode == "SI.POV.GINI")
-country.Latvia.GINI = subset(country.Latvia, IndicatorCode == "SI.POV.GINI")
-country.Hungary.GINI = subset(country.Hungary, IndicatorCode == "SI.POV.GINI")
-country.Estonia.GINI = subset(country.Estonia, IndicatorCode == "SI.POV.GINI")
-country.CzechRepublic.GINI = subset(country.CzechRepublic, IndicatorCode == "SI.POV.GINI")
-country.Cyprus.GINI = subset(country.Cyprus, IndicatorCode == "SI.POV.GINI")
-
 # Trade
 country.Slovenia.Trade = subset(country.Slovenia, IndicatorCode == "NE.TRD.GNFS.ZS")
 country.Slovakia.Trade = subset(country.Slovakia, IndicatorCode == "NE.TRD.GNFS.ZS")
@@ -111,3 +99,90 @@ for(i in 1:length(indicators)){
     cdataDF[((i-1)*10)+j,2] = indicators[i]
   }
 }
+
+countryDiff = function(countryData, year){
+  countryData$Value[countryData$Year == (year + 1)] - countryData$Value[countryData$Year == year]
+}
+
+# calulate gdp diff
+j = 3
+for(i in 1995:2003){
+  cdataDF[1,j] = countryDiff(country.Slovenia.GDP, i)
+  cdataDF[2,j] = countryDiff(country.Slovakia.GDP, i)
+  cdataDF[3,j] = countryDiff(country.Poland.GDP, i)
+  cdataDF[4,j] = countryDiff(country.Malta.GDP, i)
+  cdataDF[5,j] = countryDiff(country.Lithuania.GDP, i)
+  cdataDF[6,j] = countryDiff(country.Latvia.GDP, i)
+  cdataDF[7,j] = countryDiff(country.Hungary.GDP, i)
+  cdataDF[8,j] = countryDiff(country.Estonia.GDP, i)
+  cdataDF[9,j] = countryDiff(country.CzechRepublic.GDP, i)
+  cdataDF[10,j] = countryDiff(country.Cyprus.GDP, i)
+  j = j + 1
+}
+
+# calulate cpi diff
+j = 3
+for(i in 1995:2003){
+  cdataDF[11,j] = countryDiff(country.Slovenia.CPI, i)
+  cdataDF[12,j] = countryDiff(country.Slovakia.CPI, i)
+  cdataDF[13,j] = countryDiff(country.Poland.CPI, i)
+  cdataDF[14,j] = countryDiff(country.Malta.CPI, i)
+  cdataDF[15,j] = countryDiff(country.Lithuania.CPI, i)
+  cdataDF[16,j] = countryDiff(country.Latvia.CPI, i)
+  cdataDF[17,j] = countryDiff(country.Hungary.CPI, i)
+  cdataDF[18,j] = countryDiff(country.Estonia.CPI, i)
+  cdataDF[19,j] = countryDiff(country.CzechRepublic.CPI, i)
+  cdataDF[20,j] = countryDiff(country.Cyprus.CPI, i)
+  j = j + 1
+}
+
+# calulate cpi diff
+j = 8
+for(i in 2000:2003){
+  cdataDF[21,j] = countryDiff(country.Slovenia.Unemployment, i)
+  cdataDF[22,j] = countryDiff(country.Slovakia.Unemployment, i)
+  cdataDF[23,j] = countryDiff(country.Poland.Unemployment, i)
+  cdataDF[24,j] = countryDiff(country.Malta.Unemployment, i)
+  cdataDF[25,j] = countryDiff(country.Lithuania.Unemployment, i)
+  cdataDF[26,j] = countryDiff(country.Latvia.Unemployment, i)
+  cdataDF[27,j] = countryDiff(country.Hungary.Unemployment, i)
+  cdataDF[28,j] = countryDiff(country.Estonia.Unemployment, i)
+  cdataDF[29,j] = countryDiff(country.CzechRepublic.Unemployment, i)
+  cdataDF[30,j] = countryDiff(country.Cyprus.Unemployment, i)
+  j = j + 1
+}
+
+
+# calulate Trade diff
+j = 3
+for(i in 1995:2003){
+  cdataDF[41,j] = countryDiff(country.Slovenia.Trade, i)
+  cdataDF[42,j] = countryDiff(country.Slovakia.Trade, i)
+  cdataDF[43,j] = countryDiff(country.Poland.Trade, i)
+  cdataDF[44,j] = countryDiff(country.Malta.Trade, i)
+  cdataDF[45,j] = countryDiff(country.Lithuania.Trade, i)
+  cdataDF[46,j] = countryDiff(country.Latvia.Trade, i)
+  cdataDF[47,j] = countryDiff(country.Hungary.Trade, i)
+  cdataDF[48,j] = countryDiff(country.Estonia.Trade, i)
+  cdataDF[49,j] = countryDiff(country.CzechRepublic.Trade, i)
+  cdataDF[50,j] = countryDiff(country.Cyprus.Trade, i)
+  j = j + 1
+}
+
+# calulate Health diff
+j = 3
+for(i in 1995:2003){
+  cdataDF[51,j] = countryDiff(country.Slovenia.Health, i)
+  cdataDF[52,j] = countryDiff(country.Slovakia.Health, i)
+  cdataDF[53,j] = countryDiff(country.Poland.Health, i)
+  cdataDF[54,j] = countryDiff(country.Malta.Health, i)
+  cdataDF[55,j] = countryDiff(country.Lithuania.Health, i)
+  cdataDF[56,j] = countryDiff(country.Latvia.Health, i)
+  cdataDF[57,j] = countryDiff(country.Hungary.Health, i)
+  cdataDF[58,j] = countryDiff(country.Estonia.Health, i)
+  cdataDF[59,j] = countryDiff(country.CzechRepublic.Health, i)
+  cdataDF[60,j] = countryDiff(country.Cyprus.Health, i)
+  j = j + 1
+}
+
+cdataDF = cdataDF[-c(31, 32, 33, 34, 35, 36, 37, 38, 39, 40), ]
