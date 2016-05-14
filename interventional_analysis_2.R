@@ -116,6 +116,7 @@ getInterventionCoeficient <- function(fit, val){
 #this one for reverse situation (when we expect ressession)
 getInterventionCoeficient_res <- function(fit, val){
   pr <- predict(fit, n.ahead = 5)
+  pr$pred[pr$pred < 0] = 0
   val <- values_indicator_2004_2008(val)
   interv = sum((pr$pred - val)/val)
   return(interv)
@@ -129,6 +130,7 @@ getGrowthInterventionVector <- function(fit, val){
 #
 getGrowthInterventionVector_res <- function(fit, val){
   pr <- predict(fit, n.ahead = 5)
+  pr$pred[pr$pred < 0] = 0
   val <- values_indicator_2004_2008(val)
   return(pr$pred - val)
 }
@@ -136,7 +138,7 @@ getGrowthInterventionVector_res <- function(fit, val){
 
 plotPredictedVsReal <- function(startYear, endYear, intervYear, fit, val, color_real = "blue", color_pred = "green"){
   pr <- predict(fit, n.ahead = (endYear-intervYear + 1))
-  
+  pr$pred[pr$pred < 0] = 0
   mat      <- data.frame(year=startYear:endYear, value=val)
   mat_pred <- data.frame(year = (intervYear):endYear, value = pr$pred)
   colnames(mat_pred) <- c("year", "value")
@@ -462,10 +464,13 @@ fit <- Arima(values_indicator_before_intervention(current_coef), order=c(0,2,0))
 plotPredictedVsReal(first_year(current_coef), last_year(current_coef), 2004, fit,values_indicator(current_coef) )
 
 
-GDP_PRED$CzechRepublic <- getGrowthInterventionVector(fit,current_coef)
-K_PRED$CzechRepublic[1] <- getInterventionCoeficient(fit,current_coef)
-GDP_PRED
+CPI_PRED$Poland <- getGrowthInterventionVector_res(fit,current_coef)
+K_PRED$Poland[2] <- getInterventionCoeficient_res(fit,current_coef)
+CPI_PRED
 K_PRED
+
+
+
 
 
 
