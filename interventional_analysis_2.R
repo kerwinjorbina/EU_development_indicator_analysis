@@ -104,12 +104,11 @@ indicators =c("NY.GDP.PCAP.CD", "FP.CPI.TOTL.ZG", "SL.UEM.TOTL.NE.ZS",  "NE.CON.
 ####################################################################################
 
 #these are to find autocorrelation and autovariance to ensure that the process in not stationary
-acf(pol60_14[,3])
-pacf(pol60_14[,3])
+
 
 getInterventionCoeficient <- function(fit, val){
   pr <- predict(fit, n.ahead = 5)
-  val <- values_indicator_2004_2008(GDP.Poland)
+  val <- values_indicator_2004_2008(val)
   interv = sum((val - pr$pred)/pr$pred)
   return(interv)
 }
@@ -120,15 +119,15 @@ getGrowthInterventionVector <- function(fit, val){
   # 
   # return(rbind(c(intervYear:endYear), pr - val))
   pr <- predict(fit, n.ahead = 5)
-  val <- values_indicator_2004_2008(GDP.Poland)
+  val <- values_indicator_2004_2008(val)
   return(val - pr$pred)
 }
 
 plotPredictedVsReal <- function(startYear, endYear, intervYear, fit, val, color_real = "blue", color_pred = "green"){
-  pr <- predict(fit, n.ahead = (endYear-intervYear))
+  pr <- predict(fit, n.ahead = (endYear-intervYear + 1))
   
   mat      <- data.frame(year=startYear:endYear, value=val)
-  mat_pred <- data.frame(year = (intervYear+1):endYear, value = pr$pred)
+  mat_pred <- data.frame(year = (intervYear):endYear, value = pr$pred)
   colnames(mat_pred) <- c("year", "value")
   colnames(mat) <- c("year", "value")
   
@@ -170,7 +169,27 @@ values_indicator_before_intervention <- function(indicator, intervention = 2004)
 ####################################################################################
 
 
+Countr <- c("Poland",
+            "Slovenia" ,
+            "Slovakia"  ,
+            "Lithuania",
+            "Latvia",  
+            "Hungary", 
+            "Estonia",
+            "CzechRepublic" ,
+            "Cyprus",
+            "Malta")
+Yea <- c(2004:2008)
 
+#this is overall coefficients for every country
+K_PRED = matrix(nrow = 5,ncol = 10)
+colnames(K_PRED) <- Countr
+rownames(K_PRED) <- c("GDP","CPI", "Unemployment", "Trade", "HealthExpenditure")
+K_PRED <- as.data.frame(K_PRED)
+
+
+####################################################################################
+#################
 #Start with GDP 
 
 GDP.Slovenia 
@@ -184,30 +203,12 @@ GDP.Estonia
 GDP.CzechRepublic 
 GDP.Cyprus
 
-Countr <- c("Poland",
-            "Slovenia" ,
-            "Slovakia"  ,
-            "Lithuania",
-            "Latvia",  
-            "Hungary", 
-            "Estonia",
-            "CzechRepublic" ,
-            "Cyprus",
-            "Malta")
-Yea <- c(2004:2008)
-
 GDP_PRED = matrix(nrow = 5,ncol = 10)
 rownames(GDP_PRED) <- Yea
 colnames(GDP_PRED) <- Countr
 GDP_PRED <- as.data.frame(GDP_PRED)
 
-
-#this is overall coefficients for every country
-K_PRED = matrix(nrow = 5,ncol = 10)
-colnames(K_PRED) <- Countr
-rownames(K_PRED) <- c("GDP","CPI", "Unemployment", "Trade", "HealthExpenditure")
-K_PRED <- as.data.frame(K_PRED)
-
+####################################### POLAND
 
 missing_present(GDP.Poland)
 first_year(GDP.Poland)
@@ -223,25 +224,221 @@ GDP_PRED$Poland <- getGrowthInterventionVector(fit,GDP.Poland)
 K_PRED$Poland[1] <- getInterventionCoeficient(fit,GDP.Poland)
 K_PRED
 
-first_year(GDP.Malta)
-last_year(GDP.Malta)
-missing_present(GDP.Malta)
+
+current_coef <- GDP.Slovenia
+  
+missing_present(current_coef)
+first_year(current_coef)
+last_year(current_coef)
+
+acf(values_indicator_before_intervention(current_coef))
+
+auto.arima(values_indicator_before_intervention(current_coef))
+fit <- Arima(values_indicator_before_intervention(current_coef), order=c(1,2,4))
+plotPredictedVsReal(first_year(current_coef), last_year(current_coef), 2004, fit,values_indicator(current_coef) )
 
 
+GDP_PRED$Slovenia <- getGrowthInterventionVector(fit,current_coef)
+K_PRED$Slovenia[1] <- getInterventionCoeficient(fit,current_coef)
+K_PRED
+
+####################################################################################
+###### Slovakia
+
+current_coef <- GDP.Slovakia
+
+missing_present(current_coef)
+first_year(current_coef)
+last_year(current_coef)
+
+acf(values_indicator_before_intervention(current_coef))
+pacf(values_indicator_before_intervention(current_coef))
+
+auto.arima(values_indicator_before_intervention(current_coef))
+fit <- Arima(values_indicator_before_intervention(current_coef), order=c(3,1,5))
+plotPredictedVsReal(first_year(current_coef), last_year(current_coef), 2004, fit,values_indicator(current_coef) )
 
 
+GDP_PRED$Slovakia <- getGrowthInterventionVector(fit,current_coef)
+K_PRED$Slovakia[1] <- getInterventionCoeficient(fit,current_coef)
+K_PRED
+
+####################################################################################
+################# Lithuania
+
+current_coef <- GDP.Lithuania
+
+missing_present(current_coef)
+first_year(current_coef)
+last_year(current_coef)
+
+acf(values_indicator_before_intervention(current_coef))
+pacf(values_indicator_before_intervention(current_coef))
+
+auto.arima(values_indicator_before_intervention(current_coef))
+fit <- Arima(values_indicator_before_intervention(current_coef), order=c(2,2,1))
+plotPredictedVsReal(first_year(current_coef), last_year(current_coef), 2004, fit,values_indicator(current_coef) )
 
 
+GDP_PRED$Lithuania <- getGrowthInterventionVector(fit,current_coef)
+K_PRED$Lithuania[1] <- getInterventionCoeficient(fit,current_coef)
+GDP_PRED
+K_PRED
 
 
+####################################################################################
+################# Latvia
+
+current_coef <- GDP.Latvia
+
+missing_present(current_coef)
+first_year(current_coef)
+last_year(current_coef)
+
+acf(values_indicator_before_intervention(current_coef))
+pacf(values_indicator_before_intervention(current_coef))
+
+auto.arima(values_indicator_before_intervention(current_coef))
+fit <- Arima(values_indicator_before_intervention(current_coef), order=c(0,2,0))
+plotPredictedVsReal(first_year(current_coef), last_year(current_coef), 2004, fit,values_indicator(current_coef) )
 
 
+GDP_PRED$Latvia <- getGrowthInterventionVector(fit,current_coef)
+K_PRED$Latvia[1] <- getInterventionCoeficient(fit,current_coef)
+GDP_PRED
+K_PRED
 
 
+####################################################################################
+################# Hungary
+
+current_coef <- GDP.Hungary
+
+missing_present(current_coef)
+first_year(current_coef)
+last_year(current_coef)
+
+acf(values_indicator_before_intervention(current_coef))
+pacf(values_indicator_before_intervention(current_coef))
+
+auto.arima(values_indicator_before_intervention(current_coef))
+fit <- Arima(values_indicator_before_intervention(current_coef), order=c(0,2,0))
+plotPredictedVsReal(first_year(current_coef), last_year(current_coef), 2044, fit,values_indicator(current_coef) )
 
 
+GDP_PRED$Hungary <- getGrowthInterventionVector(fit,current_coef)
+K_PRED$Hungary[1] <- getInterventionCoeficient(fit,current_coef)
+GDP_PRED
+K_PRED
 
 
+####################################################################################
+#################
+
+current_coef <- GDP.Latvia
+
+missing_present(current_coef)
+first_year(current_coef)
+last_year(current_coef)
+
+acf(values_indicator_before_intervention(current_coef))
+pacf(values_indicator_before_intervention(current_coef))
+
+auto.arima(values_indicator_before_intervention(current_coef))
+fit <- Arima(values_indicator_before_intervention(current_coef), order=c(0,2,0))
+plotPredictedVsReal(first_year(current_coef), last_year(current_coef), 2004, fit,values_indicator(current_coef) )
+
+
+GDP_PRED$Latvia <- getGrowthInterventionVector(fit,current_coef)
+K_PRED$Latvia[1] <- getInterventionCoeficient(fit,current_coef)
+GDP_PRED
+K_PRED
+
+####################################################################################
+#################
+current_coef <- GDP.Latvia
+
+missing_present(current_coef)
+first_year(current_coef)
+last_year(current_coef)
+
+acf(values_indicator_before_intervention(current_coef))
+pacf(values_indicator_before_intervention(current_coef))
+
+auto.arima(values_indicator_before_intervention(current_coef))
+fit <- Arima(values_indicator_before_intervention(current_coef), order=c(0,2,0))
+plotPredictedVsReal(first_year(current_coef), last_year(current_coef), 2004, fit,values_indicator(current_coef) )
+
+
+GDP_PRED$Latvia <- getGrowthInterventionVector(fit,current_coef)
+K_PRED$Latvia[1] <- getInterventionCoeficient(fit,current_coef)
+GDP_PRED
+K_PRED
+
+####################################################################################
+#################
+current_coef <- GDP.Latvia
+
+missing_present(current_coef)
+first_year(current_coef)
+last_year(current_coef)
+
+acf(values_indicator_before_intervention(current_coef))
+pacf(values_indicator_before_intervention(current_coef))
+
+auto.arima(values_indicator_before_intervention(current_coef))
+fit <- Arima(values_indicator_before_intervention(current_coef), order=c(0,2,0))
+plotPredictedVsReal(first_year(current_coef), last_year(current_coef), 2004, fit,values_indicator(current_coef) )
+
+
+GDP_PRED$Latvia <- getGrowthInterventionVector(fit,current_coef)
+K_PRED$Latvia[1] <- getInterventionCoeficient(fit,current_coef)
+GDP_PRED
+K_PRED
+
+####################################################################################
+#################
+current_coef <- GDP.Latvia
+
+missing_present(current_coef)
+first_year(current_coef)
+last_year(current_coef)
+
+acf(values_indicator_before_intervention(current_coef))
+pacf(values_indicator_before_intervention(current_coef))
+
+auto.arima(values_indicator_before_intervention(current_coef))
+fit <- Arima(values_indicator_before_intervention(current_coef), order=c(0,2,0))
+plotPredictedVsReal(first_year(current_coef), last_year(current_coef), 2004, fit,values_indicator(current_coef) )
+
+
+GDP_PRED$Latvia <- getGrowthInterventionVector(fit,current_coef)
+K_PRED$Latvia[1] <- getInterventionCoeficient(fit,current_coef)
+GDP_PRED
+K_PRED
+
+####################################################################################
+#################
+
+
+####################################################################################
+#################
+
+
+####################################################################################
+#################
+
+
+####################################################################################
+#################
+
+
+####################################################################################
+#################
+
+
+####################################################################################
+#################
 
 
 
