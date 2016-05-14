@@ -43,16 +43,16 @@ GDP.Cyprus = subset(Cyprus, IndicatorCode == "NY.GDP.PCAP.CD")
 
 # Consumer Price Index
 
-CPI.Slovenia = subset(Slovenia, IndicatorCode == "FP.CPI.TOTL.ZG")
-CPI.Slovakia = subset(Slovakia, IndicatorCode == "FP.CPI.TOTL.ZG")
-CPI.Poland = subset(Poland, IndicatorCode == "FP.CPI.TOTL.ZG")
-CPI.Malta = subset(Malta, IndicatorCode == "FP.CPI.TOTL.ZG")
-CPI.Lithuania = subset(Lithuania, IndicatorCode == "FP.CPI.TOTL.ZG")
-CPI.Latvia = subset(Latvia, IndicatorCode == "FP.CPI.TOTL.ZG")
-CPI.Hungary = subset(Hungary, IndicatorCode == "FP.CPI.TOTL.ZG")
-CPI.Estonia = subset(Estonia, IndicatorCode == "FP.CPI.TOTL.ZG")
-CPI.CzechRepublic = subset(CzechRepublic, IndicatorCode == "FP.CPI.TOTL.ZG")
-CPI.Cyprus = subset(Cyprus, IndicatorCode == "FP.CPI.TOTL.ZG")
+CPI.Slovenia = subset(Slovenia, IndicatorCode == "FP.CPI.TOTL")
+CPI.Slovakia = subset(Slovakia, IndicatorCode == "FP.CPI.TOTL")
+CPI.Poland = subset(Poland, IndicatorCode == "FP.CPI.TOTL")
+CPI.Malta = subset(Malta, IndicatorCode == "FP.CPI.TOTL")
+CPI.Lithuania = subset(Lithuania, IndicatorCode == "FP.CPI.TOTL")
+CPI.Latvia = subset(Latvia, IndicatorCode == "FP.CPI.TOTL")
+CPI.Hungary = subset(Hungary, IndicatorCode == "FP.CPI.TOTL")
+CPI.Estonia = subset(Estonia, IndicatorCode == "FP.CPI.TOTL")
+CPI.CzechRepublic = subset(CzechRepublic, IndicatorCode == "FP.CPI.TOTL")
+CPI.Cyprus = subset(Cyprus, IndicatorCode == "FP.CPI.TOTL")
 
 # Unemployment
 UEmploy.Slovenia = subset(Slovenia, IndicatorCode == "SL.UEM.TOTL.NE.ZS")
@@ -436,7 +436,7 @@ K_PRED
 ####################################################################################
 ############      CPI
 ############  Here we have Consumer price index
-############ in this cases lower prices are better, that will drive our analysis
+############ 
 ####################################################################################
 ####################################################################################
 ####################################################################################
@@ -475,7 +475,27 @@ K_PRED
 
 
 ####################################################################################
-#################
+################# Slovenia
+
+current_coef <- CPI.Slovenia
+
+missing_present(current_coef)
+first_year(current_coef)
+last_year(current_coef)
+
+acf(values_indicator_before_intervention(current_coef))
+pacf(values_indicator_before_intervention(current_coef))
+
+auto.arima(values_indicator_before_intervention(current_coef))
+fit <- Arima(values_indicator_before_intervention(current_coef), order=c(0,2,2))
+plotPredictedVsReal(first_year(current_coef), last_year(current_coef), 2004, fit,values_indicator(current_coef) )
+
+
+CPI_PRED$Slovenia <- getGrowthInterventionVector_res(fit,current_coef)
+K_PRED$Slovenia[2] <- getInterventionCoeficient_res(fit,current_coef)
+CPI_PRED
+K_PRED
+
 
 
 ####################################################################################
