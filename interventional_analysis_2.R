@@ -1,4 +1,4 @@
-#interventional analysis 2 
+#intervention analysis 2 
 
 
 
@@ -67,19 +67,6 @@ UEmploy.CzechRepublic = subset(CzechRepublic, IndicatorCode == "SL.UEM.TOTL.NE.Z
 UEmploy.Cyprus = subset(Cyprus, IndicatorCode == "SL.UEM.TOTL.NE.ZS")
 
 
-# GNI
-GINI.Slovenia = subset(Slovenia, IndicatorCode == "SI.POV.GINI")
-GINI.Slovakia = subset(Slovakia, IndicatorCode == "SI.POV.GINI")
-GINI.Poland = subset(Poland, IndicatorCode == "SI.POV.GINI")
-GINI.Malta = subset(Malta, IndicatorCode == "SI.POV.GINI")
-GINI.Lithuania = subset(Lithuania, IndicatorCode == "SI.POV.GINI")
-GINI.Latvia = subset(Latvia, IndicatorCode == "SI.POV.GINI")
-GINI.Hungary = subset(Hungary, IndicatorCode == "SI.POV.GINI")
-GINI.Estonia = subset(Estonia, IndicatorCode == "SI.POV.GINI")
-GINI.CzechRepublic = subset(CzechRepublic, IndicatorCode == "SI.POV.GINI")
-GINI.Cyprus = subset(Cyprus, IndicatorCode == "SI.POV.GINI")
-
-
 # Trade
 Trade.Slovenia = subset(Slovenia, IndicatorCode == "NE.TRD.GNFS.ZS")
 Trade.Slovakia = subset(Slovakia, IndicatorCode == "NE.TRD.GNFS.ZS")
@@ -106,7 +93,7 @@ HealthExpenditure.CzechRepublic = subset(CzechRepublic, IndicatorCode == "NY.ADJ
 HealthExpenditure.Cyprus = subset(Cyprus, IndicatorCode == "NY.ADJ.NNAT.CD")
 
 countriesEU = c("SVN", "SVK", "POL", "MLT", "LTU", "LVA", "HUN", "EST", "CZE", "CYP")
-indicators =c("NY.GDP.PCAP.CD", "FP.CPI.TOTL.ZG", "SL.UEM.TOTL.NE.ZS", "NY.GNP.MKTP.KD.ZG", "NE.CON.PRVT.PP.CD", "NE.TRD.GNFS.ZS")
+indicators =c("NY.GDP.PCAP.CD", "FP.CPI.TOTL.ZG", "SL.UEM.TOTL.NE.ZS",  "NE.CON.PRVT.PP.CD", "NE.TRD.GNFS.ZS")
 
 
 
@@ -120,21 +107,21 @@ indicators =c("NY.GDP.PCAP.CD", "FP.CPI.TOTL.ZG", "SL.UEM.TOTL.NE.ZS", "NY.GNP.M
 acf(pol60_14[,3])
 pacf(pol60_14[,3])
 
-getInterventionCoeficient <- function(startYear, endYear, intervYear, fit, val){
-  pr <- predict(fit, n.ahead = (endYear-intervYear))
-  val <- tail(val,(endYear-intervYear))
-  
-  normal_factor <- max(c(pr$pred, val)) - min(c(pr$pred, val))
-  
-  interv = sum(pr$pred-val) / (normal_factor * (endYear-intervYear))
+getInterventionCoeficient <- function(fit, val){
+  pr <- predict(fit, n.ahead = 5)
+  val <- values_indicator_2004_2008(GDP.Poland)
+  interv = sum((val - pr$pred)/pr$pred)
   return(interv)
 }
 
-getGrowthInterventionVector <- function(startYear, endYear, intervYear, fit, val){
-  pr <- predict(fit, n.ahead = (endYear-intervYear))
-  val <- tail(val,(endYear-intervYear))
-  
-  return(rbind(c(intervYear:endYear), pr - val))
+getGrowthInterventionVector <- function(fit, val){
+  # pr <- predict(fit, n.ahead = (endYear-intervYear))
+  # val <- tail(val,(endYear-intervYear))
+  # 
+  # return(rbind(c(intervYear:endYear), pr - val))
+  pr <- predict(fit, n.ahead = 5)
+  val <- values_indicator_2004_2008(GDP.Poland)
+  return(val - pr$pred)
 }
 
 plotPredictedVsReal <- function(startYear, endYear, intervYear, fit, val, color_real = "blue", color_pred = "green"){
@@ -166,6 +153,12 @@ missing_present <- function(indicator){
 values_indicator <- function(indicator){
   return(indicator[,6])
 }
+
+values_indicator_2004_2008 <- function(indicator){
+   ind <- subset(indicator, Year <= 2008 & Year >= 2004)
+   return(ind[,6])
+}
+
 values_indicator_before_intervention <- function(indicator, intervention = 2004){
   return(subset(indicator, Year < 2004)[,6])
 }
@@ -191,7 +184,29 @@ GDP.Estonia
 GDP.CzechRepublic 
 GDP.Cyprus
 
-country.Slovenia.GDP.growth 
+Countr <- c("Poland",
+            "Slovenia" ,
+            "Slovakia"  ,
+            "Lithuania",
+            "Latvia",  
+            "Hungary", 
+            "Estonia",
+            "CzechRepublic" ,
+            "Cyprus",
+            "Malta")
+Yea <- c(2004:2008)
+
+GDP_PRED = matrix(nrow = 5,ncol = 10)
+rownames(GDP_PRED) <- Yea
+colnames(GDP_PRED) <- Countr
+GDP_PRED <- as.data.frame(GDP_PRED)
+
+
+#this is overall coefficients for every country
+K_PRED = matrix(nrow = 5,ncol = 10)
+colnames(K_PRED) <- Countr
+rownames(K_PRED) <- c("GDP","CPI", "Unemployment", "Trade", "HealthExpenditure")
+K_PRED <- as.data.frame(K_PRED)
 
 
 missing_present(GDP.Poland)
@@ -204,13 +219,26 @@ fit <- Arima(values_indicator_before_intervention(GDP.Poland), order=c(3,3,0))
 plotPredictedVsReal(first_year(GDP.Poland), last_year(GDP.Poland), 2004, fit,values_indicator(GDP.Poland) )
 
 
-
-
-
+GDP_PRED$Poland <- getGrowthInterventionVector(fit,GDP.Poland)
+K_PRED$Poland[1] <- getInterventionCoeficient(fit,GDP.Poland)
+K_PRED
 
 first_year(GDP.Malta)
 last_year(GDP.Malta)
 missing_present(GDP.Malta)
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
