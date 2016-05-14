@@ -30,16 +30,16 @@ country.CzechRepublic.GDP = subset(country.CzechRepublic, IndicatorCode == "NY.G
 country.Cyprus.GDP = subset(country.Cyprus, IndicatorCode == "NY.GDP.PCAP.CD")
 
 # CPI
-country.Slovenia.CPI = subset(country.Slovenia, IndicatorCode == "FP.CPI.TOTL.ZG")
-country.Slovakia.CPI = subset(country.Slovakia, IndicatorCode == "FP.CPI.TOTL.ZG")
-country.Poland.CPI = subset(country.Poland, IndicatorCode == "FP.CPI.TOTL.ZG")
-country.Malta.CPI = subset(country.Malta, IndicatorCode == "FP.CPI.TOTL.ZG")
-country.Lithuania.CPI = subset(country.Lithuania, IndicatorCode == "FP.CPI.TOTL.ZG")
-country.Latvia.CPI = subset(country.Latvia, IndicatorCode == "FP.CPI.TOTL.ZG")
-country.Hungary.CPI = subset(country.Hungary, IndicatorCode == "FP.CPI.TOTL.ZG")
-country.Estonia.CPI = subset(country.Estonia, IndicatorCode == "FP.CPI.TOTL.ZG")
-country.CzechRepublic.CPI = subset(country.CzechRepublic, IndicatorCode == "FP.CPI.TOTL.ZG")
-country.Cyprus.CPI = subset(country.Cyprus, IndicatorCode == "FP.CPI.TOTL.ZG")
+country.Slovenia.CPI = subset(country.Slovenia, IndicatorCode == "FP.CPI.TOTL")
+country.Slovakia.CPI = subset(country.Slovakia, IndicatorCode == "FP.CPI.TOTL")
+country.Poland.CPI = subset(country.Poland, IndicatorCode == "FP.CPI.TOTL")
+country.Malta.CPI = subset(country.Malta, IndicatorCode == "FP.CPI.TOTL")
+country.Lithuania.CPI = subset(country.Lithuania, IndicatorCode == "FP.CPI.TOTL")
+country.Latvia.CPI = subset(country.Latvia, IndicatorCode == "FP.CPI.TOTL")
+country.Hungary.CPI = subset(country.Hungary, IndicatorCode == "FP.CPI.TOTL")
+country.Estonia.CPI = subset(country.Estonia, IndicatorCode == "FP.CPI.TOTL")
+country.CzechRepublic.CPI = subset(country.CzechRepublic, IndicatorCode == "FP.CPI.TOTL")
+country.Cyprus.CPI = subset(country.Cyprus, IndicatorCode == "FP.CPI.TOTL")
 
 # Unemployment
 country.Slovenia.Unemployment = subset(country.Slovenia, IndicatorCode == "SL.UEM.TOTL.NE.ZS")
@@ -186,3 +186,53 @@ for(i in 1995:2003){
 }
 
 cdataDF = cdataDF[-c(31, 32, 33, 34, 35, 36, 37, 38, 39, 40), ]
+
+#write.csv(cdataDF, file = "countriesGrowth.csv")
+
+#GDP CLUSTER
+kmeans(as.matrix(cdataDF[1:10,3:11]), 3)
+pca = prcomp(cdataDF[1:10,3:11],retx = TRUE, center = FALSE, scale.= FALSE)
+
+ev = pca$sdev^2
+
+kmeans(pca$x[,1:2], 3)
+
+# Let's plot the countries on the 2D scatter plot using first two PCA scores 
+sc = data.frame(pca$x[,1:2])
+sc$Name = countriesEU
+library(ggplot2)
+
+ggplot(sc,aes(x = PC1, y = PC2)) + geom_point() + geom_text(aes(label=Name),color="red",size=4,hjust=1.1)
+
+# Let's plot PCA loadings and scores on the same plot
+biplot(pca)
+
+
+# combining data
+cdata2 = matrix(, nrow = 10, ncol = 41)
+cdataDF2 = as.data.frame(cdata2)
+colnames(cdataDF2) = c("country", "GDP_Y1", "GDP_Y2", "GDP_Y3", "GDP_Y4", "GDP_Y5",
+                      "GDP_Y6", "GDP_Y7", "GDP_Y8", "GDP_Y9", "CPI_Y1", "CPI_Y2", "CPI_Y3", "CPI_Y4", 
+                      "CPI_Y5", "CPI_Y6", "CPI_Y7", "CPI_Y8", "CPI_Y9",
+                      "UE_Y6", "UE_Y7", "UE_Y8", "UE_Y9", "T_Y1", "T_Y2", "T_Y3", "T_Y4", "T_Y5", "T_Y6",
+                      "T_Y7", "T_Y8", "T_Y9", "H_Y1", "H_Y2", "H_Y3", "H_Y4", "H_Y5",
+                      "H_Y6", "H_Y7", "H_Y8", "H_Y9")
+cdataDF2[,2:10] = cdataDF[1:10,3:11]
+cdataDF2[,11:19] = cdataDF[11:20,3:11]
+cdataDF2[,20:23] = cdataDF[21:30,8:11]
+cdataDF2[,24:32] = cdataDF[31:40,3:11]
+cdataDF2[,33:41] = cdataDF[41:50,3:11]
+
+for(i in 1:length(countriesEU)){
+  cdataDF2[i,1] = countriesEU[i]
+}
+#write.csv(cdataDF2, file = "countriesGrowthCombined.csv")
+
+pca2 = prcomp(cdataDF2[,2:41],retx = TRUE, center = FALSE, scale.= FALSE)
+kmeans(pca2$x[,1:2], 3)
+
+sc2 = data.frame(pca2$x[,1:2])
+sc2$Name = countriesEU
+
+ggplot(sc2,aes(x = PC1, y = PC2)) + geom_point() + geom_text(aes(label=Name),color="red",size=4,hjust=1.1)
+
