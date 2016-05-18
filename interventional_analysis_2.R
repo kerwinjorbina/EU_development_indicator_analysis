@@ -112,6 +112,13 @@ getInterventionCoeficient <- function(fit, val){
   interv = sum((val - pr$pred)/pr$pred)
   return(interv)
 }
+getInterventionCoeficientABS <- function(fit, val){
+  pr <- predict(fit, n.ahead = 5)
+  val <- values_indicator_2004_2008(val)
+  interv = abs(sum((val - pr$pred)/pr$pred))
+  return(interv)
+}
+
 
 #this one for reverse situation (when we expect ressession)
 getInterventionCoeficient_res <- function(fit, val){
@@ -165,6 +172,8 @@ missing_present <- function(indicator){
 values_indicator <- function(indicator){
   return(indicator[,6])
 }
+
+
 
 values_indicator_2004_2008 <- function(indicator){
    ind <- subset(indicator, Year <= 2008 & Year >= 2004)
@@ -1181,4 +1190,249 @@ TRADE_PRED$Malta <- getGrowthInterventionVector(fit,current_coef)
 K_PRED$Malta[4] <- getInterventionCoeficient(fit,current_coef)
 TRADE_PRED
 K_PRED
+
+
+
+####################################################################################
+####################################################################################
+####################################################################################
+####################################################################################
+############  
+############      Helth Expenditure
+############
+####################################################################################
+####################################################################################
+####################################################################################
+####################################################################################
+
+
+HEALTH_PRED = matrix(nrow = 5,ncol = 10)
+rownames(HEALTH_PRED) <- Yea
+colnames(HEALTH_PRED) <- Countr
+HEALTH_PRED <- as.data.frame(HEALTH_PRED)
+
+####################################################################################
+####################################### POLAND
+
+current_coef <- HealthExpenditure.Poland
+
+missing_present(current_coef)
+first_year(current_coef)
+last_year(current_coef)
+
+acf(values_indicator_before_intervention(current_coef))
+pacf(values_indicator_before_intervention(current_coef))
+
+auto.arima(values_indicator_before_intervention(current_coef))
+fit <- Arima(values_indicator_before_intervention(current_coef), order=c(1,1,2))
+plotPredictedVsReal(first_year(current_coef), last_year(current_coef), 2004, fit,values_indicator(current_coef) )
+
+
+HEALTH_PRED$Poland <- getGrowthInterventionVector(fit,current_coef)
+K_PRED$Poland[5] <- getInterventionCoeficient(fit,current_coef)
+HEALTH_PRED
+K_PRED
+
+
+####################################################################################
+####################################### Slovenia
+
+current_coef <- HealthExpenditure.Slovenia 
+
+missing_present(current_coef)
+first_year(current_coef)
+last_year(current_coef)
+
+acf(values_indicator_before_intervention(current_coef))
+pacf(values_indicator_before_intervention(current_coef))
+
+auto.arima(values_indicator_before_intervention(current_coef))
+fit <- Arima(values_indicator_before_intervention(current_coef), order=c(2,2,1))
+plotPredictedVsReal(first_year(current_coef), last_year(current_coef), 2004, fit,values_indicator(current_coef) )
+
+
+HEALTH_PRED$Slovenia <- getGrowthInterventionVector(fit,current_coef)
+K_PRED$Slovenia[5] <- getInterventionCoeficient(fit,current_coef)
+HEALTH_PRED
+K_PRED
+
+
+####################################################################################
+####################################### Slovakia
+
+current_coef <- HealthExpenditure.Slovakia
+
+missing_present(current_coef)
+first_year(current_coef)
+last_year(current_coef)
+
+acf(values_indicator_before_intervention(current_coef))
+pacf(values_indicator_before_intervention(current_coef))
+
+auto.arima(values_indicator_before_intervention(current_coef))
+fit <- Arima(values_indicator_before_intervention(current_coef), order=c(1,2,1))
+
+a <- c(values_indicator(current_coef)[1:6],
+  ((values_indicator(current_coef)[6]+values_indicator(current_coef)[7])/2),
+  values_indicator(current_coef)[7:18])
+
+plotPredictedVsReal(first_year(current_coef), last_year(current_coef), 2004, fit,a)
+
+
+HEALTH_PRED$Slovakia <- getGrowthInterventionVector(fit,current_coef)
+K_PRED$Slovakia[5] <- getInterventionCoeficientABS(fit,current_coef)
+HEALTH_PRED
+K_PRED
+
+
+####################################################################################
+####################################### Lithuania
+######
+######    NO DATA AVALIALABLE TO MAKE A PREDICTION
+######
+
+
+
+####################################################################################
+####################################### Latvia
+
+current_coef <- HealthExpenditure.Latvia
+
+missing_present(current_coef)
+first_year(current_coef)
+last_year(current_coef)
+
+acf(values_indicator_before_intervention(current_coef))
+pacf(values_indicator_before_intervention(current_coef))
+
+auto.arima(values_indicator_before_intervention(current_coef))
+fit <- Arima(values_indicator_before_intervention(current_coef), order=c(2,2,0))
+plotPredictedVsReal(first_year(current_coef), last_year(current_coef), 2004, fit,values_indicator(current_coef) )
+
+
+HEALTH_PRED$Latvia <- getGrowthInterventionVector(fit,current_coef)
+K_PRED$Latvia[5] <- getInterventionCoeficient(fit,current_coef)
+HEALTH_PRED
+K_PRED
+
+
+####################################################################################
+####################################### Hungary
+
+current_coef <- HealthExpenditure.Hungary
+
+missing_present(current_coef)
+first_year(current_coef)
+last_year(current_coef)
+
+acf(values_indicator_before_intervention(current_coef))
+pacf(values_indicator_before_intervention(current_coef))
+
+auto.arima(values_indicator_before_intervention(current_coef))
+fit <- Arima(values_indicator_before_intervention(current_coef), order=c(0,1,1))
+plotPredictedVsReal(first_year(current_coef), last_year(current_coef), 2004, fit,values_indicator(current_coef) )
+
+
+HEALTH_PRED$Hungary <- getGrowthInterventionVector(fit,current_coef)
+K_PRED$Hungary[5] <- getInterventionCoeficient(fit,current_coef)
+HEALTH_PRED
+K_PRED
+
+
+####################################################################################
+####################################### Estonia
+
+current_coef <- HealthExpenditure.Estonia
+
+missing_present(current_coef)
+first_year(current_coef)
+last_year(current_coef)
+
+acf(values_indicator_before_intervention(current_coef))
+pacf(values_indicator_before_intervention(current_coef))
+
+auto.arima(values_indicator_before_intervention(current_coef))
+fit <- Arima(values_indicator_before_intervention(current_coef), order=c(1,1,2))
+plotPredictedVsReal(first_year(current_coef), last_year(current_coef), 2004, fit,values_indicator(current_coef) )
+
+
+HEALTH_PRED$Estonia <- getGrowthInterventionVector(fit,current_coef)
+K_PRED$Estonia[5] <- getInterventionCoeficient(fit,current_coef)
+HEALTH_PRED
+K_PRED
+
+####################################################################################
+####################################### CzechRepublic
+
+current_coef <- HealthExpenditure.CzechRepublic
+
+missing_present(current_coef)
+first_year(current_coef)
+last_year(current_coef)
+
+acf(values_indicator_before_intervention(current_coef))
+pacf(values_indicator_before_intervention(current_coef))
+
+auto.arima(values_indicator_before_intervention(current_coef))
+fit <- Arima(values_indicator_before_intervention(current_coef), order=c(1,1,2))
+plotPredictedVsReal(first_year(current_coef), last_year(current_coef), 2004, fit,values_indicator(current_coef) )
+
+
+HEALTH_PRED$CzechRepublic <- getGrowthInterventionVector(fit,current_coef)
+K_PRED$CzechRepublic[5] <- getInterventionCoeficient(fit,current_coef)
+HEALTH_PRED
+K_PRED
+
+
+####################################################################################
+####################################### Cyprus
+
+current_coef <- HealthExpenditure.Cyprus
+
+missing_present(current_coef)
+first_year(current_coef)
+last_year(current_coef)
+
+acf(values_indicator_before_intervention(current_coef))
+pacf(values_indicator_before_intervention(current_coef))
+
+auto.arima(values_indicator_before_intervention(current_coef))
+fit <- Arima(values_indicator_before_intervention(current_coef), order=c(1,1,0))
+plotPredictedVsReal(first_year(current_coef), last_year(current_coef), 2004, fit,values_indicator(current_coef) )
+
+
+HEALTH_PRED$Cyprus <- getGrowthInterventionVector(fit,current_coef)
+K_PRED$Cyprus[5] <- getInterventionCoeficient(fit,current_coef)
+HEALTH_PRED
+K_PRED
+
+####################################################################################
+####################################### Malta
+
+current_coef <- HealthExpenditure.Malta
+
+missing_present(current_coef)
+first_year(current_coef)
+last_year(current_coef)
+
+acf(values_indicator_before_intervention(current_coef))
+pacf(values_indicator_before_intervention(current_coef))
+
+auto.arima(values_indicator_before_intervention(current_coef))
+fit <- Arima(values_indicator_before_intervention(current_coef), order=c(0,0,0))
+plotPredictedVsReal(first_year(current_coef), last_year(current_coef), 2004, fit,values_indicator(current_coef))
+
+
+HEALTH_PRED$Malta <- getGrowthInterventionVector(fit,current_coef)
+K_PRED$Malta[5] <- getInterventionCoeficient(fit,current_coef)
+HEALTH_PRED
+K_PRED
+
+
+####################################################################################################################################
+################################################################################################################
+
+
+
+
 
