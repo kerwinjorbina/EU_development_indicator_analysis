@@ -27,6 +27,13 @@ Estonia = subset(data, CountryCode == "EST" & Year >= 1995)
 CzechRepublic = subset(data, CountryCode == "CZE" & Year >= 1995)
 Cyprus = subset(data, CountryCode == "CYP" & Year >= 1995)
 
+#To compare with
+Croatia = subset(data, CountryCode == "HRV" & Year >= 1995)
+Romania = subset(data, CountryCode == "ROM" & Year >= 1995)
+Bulgaria = subset(data, CountryCode == "BGR" & Year >= 1995)
+
+
+
 
 # GDP
 
@@ -41,6 +48,12 @@ GDP.Estonia = subset(Estonia, IndicatorCode == "NY.GDP.PCAP.CD")
 GDP.CzechRepublic = subset(CzechRepublic, IndicatorCode == "NY.GDP.PCAP.CD")
 GDP.Cyprus = subset(Cyprus, IndicatorCode == "NY.GDP.PCAP.CD")
 
+## to compare with
+GDP.Croatia = subset(Croatia, IndicatorCode == "NY.GDP.PCAP.CD")
+GDP.Romania = subset(Romania, IndicatorCode == "NY.GDP.PCAP.CD")
+GDP.Bulgaria = subset(Bulgaria, IndicatorCode == "NY.GDP.PCAP.CD")
+
+
 # Consumer Price Index
 
 CPI.Slovenia = subset(Slovenia, IndicatorCode == "FP.CPI.TOTL")
@@ -54,6 +67,11 @@ CPI.Estonia = subset(Estonia, IndicatorCode == "FP.CPI.TOTL")
 CPI.CzechRepublic = subset(CzechRepublic, IndicatorCode == "FP.CPI.TOTL")
 CPI.Cyprus = subset(Cyprus, IndicatorCode == "FP.CPI.TOTL")
 
+## to compare with
+CPI.Croatia = subset(Croatia, IndicatorCode == "FP.CPI.TOTL")
+CPI.Romania = subset(Romania, IndicatorCode == "FP.CPI.TOTL")
+CPI.Bulgaria = subset(Bulgaria, IndicatorCode == "FP.CPI.TOTL")
+
 # Unemployment
 UEmploy.Slovenia = subset(Slovenia, IndicatorCode == "SL.UEM.TOTL.NE.ZS")
 UEmploy.Slovakia = subset(Slovakia, IndicatorCode == "SL.UEM.TOTL.NE.ZS")
@@ -65,6 +83,11 @@ UEmploy.Hungary = subset(Hungary, IndicatorCode == "SL.UEM.TOTL.NE.ZS")
 UEmploy.Estonia = subset(Estonia, IndicatorCode == "SL.UEM.TOTL.NE.ZS")
 UEmploy.CzechRepublic = subset(CzechRepublic, IndicatorCode == "SL.UEM.TOTL.NE.ZS")
 UEmploy.Cyprus = subset(Cyprus, IndicatorCode == "SL.UEM.TOTL.NE.ZS")
+
+## to compare with
+UEmploy.Croatia = subset(Croatia, IndicatorCode == "SL.UEM.TOTL.NE.ZS")
+UEmploy.Romania = subset(Romania, IndicatorCode == "SL.UEM.TOTL.NE.ZS")
+UEmploy.Bulgaria = subset(Bulgaria, IndicatorCode == "SL.UEM.TOTL.NE.ZS")
 
 
 # Trade
@@ -79,6 +102,11 @@ Trade.Estonia = subset(Estonia, IndicatorCode == "NE.TRD.GNFS.ZS")
 Trade.CzechRepublic = subset(CzechRepublic, IndicatorCode == "NE.TRD.GNFS.ZS")
 Trade.Cyprus = subset(Cyprus, IndicatorCode == "NE.TRD.GNFS.ZS")
 
+## to compare with
+Trade.Croatia = subset(Croatia, IndicatorCode == "NE.TRD.GNFS.ZS")
+Trade.Romania = subset(Romania, IndicatorCode == "NE.TRD.GNFS.ZS")
+Trade.Bulgaria = subset(Bulgaria, IndicatorCode == "NE.TRD.GNFS.ZS")
+
 
 # Savings
 HealthExpenditure.Slovenia = subset(Slovenia, IndicatorCode == "NY.ADJ.NNAT.CD")
@@ -91,6 +119,11 @@ HealthExpenditure.Hungary = subset(Hungary, IndicatorCode == "NY.ADJ.NNAT.CD")
 HealthExpenditure.Estonia = subset(Estonia, IndicatorCode == "NY.ADJ.NNAT.CD")
 HealthExpenditure.CzechRepublic = subset(CzechRepublic, IndicatorCode == "NY.ADJ.NNAT.CD")
 HealthExpenditure.Cyprus = subset(Cyprus, IndicatorCode == "NY.ADJ.NNAT.CD")
+
+## to compare with
+HealthExpenditure.Croatia = subset(Croatia, IndicatorCode == "NY.ADJ.NNAT.CD")
+HealthExpenditure.Romania = subset(Romania, IndicatorCode == "NY.ADJ.NNAT.CD")
+HealthExpenditure.Bulgaria = subset(Bulgaria, IndicatorCode == "NY.ADJ.NNAT.CD")
 
 countriesEU = c("SVN", "SVK", "POL", "MLT", "LTU", "LVA", "HUN", "EST", "CZE", "CYP")
 indicators =c("NY.GDP.PCAP.CD", "FP.CPI.TOTL.ZG", "SL.UEM.TOTL.NE.ZS",  "NE.CON.PRVT.PP.CD", "NE.TRD.GNFS.ZS")
@@ -200,11 +233,14 @@ Countr <- c("Poland",
             "Estonia",
             "CzechRepublic" ,
             "Cyprus",
-            "Malta")
+            "Malta","Croatia","Romania", "Bulgaria")
+
+NumberOfCountries = 13
+
 Yea <- c(2004:2008)
 
 #this is overall coefficients for every country
-K_PRED = matrix(nrow = 5,ncol = 10)
+K_PRED = matrix(nrow = 5,ncol = NumberOfCountries)
 colnames(K_PRED) <- Countr
 rownames(K_PRED) <- c("GDP","CPI", "Unemployment", "Trade", "HealthExpenditure")
 K_PRED <- as.data.frame(K_PRED)
@@ -225,7 +261,7 @@ GDP.Estonia
 GDP.CzechRepublic 
 GDP.Cyprus
 
-GDP_PRED = matrix(nrow = 5,ncol = 10)
+GDP_PRED = matrix(nrow = 5,ncol = NumberOfCountries)
 rownames(GDP_PRED) <- Yea
 colnames(GDP_PRED) <- Countr
 GDP_PRED <- as.data.frame(GDP_PRED)
@@ -440,6 +476,74 @@ GDP_PRED
 K_PRED
 
 ####################################################################################
+################# Croatia
+current_coef <- GDP.Croatia
+
+missing_present(current_coef)
+first_year(current_coef)
+last_year(current_coef)
+
+acf(values_indicator_before_intervention(current_coef))
+pacf(values_indicator_before_intervention(current_coef))
+
+auto.arima(values_indicator_before_intervention(current_coef))
+fit <- Arima(values_indicator_before_intervention(current_coef), order=c(1,1,0))
+plotPredictedVsReal(first_year(current_coef), last_year(current_coef), 2004, fit,values_indicator(current_coef) )
+
+
+GDP_PRED$Croatia <- getGrowthInterventionVector(fit,current_coef)
+K_PRED$Croatia[1] <- getInterventionCoeficient(fit,current_coef)
+GDP_PRED
+K_PRED
+
+####################################################################################
+################# Romania
+current_coef <- GDP.Romania 
+
+missing_present(current_coef)
+first_year(current_coef)
+last_year(current_coef)
+
+acf(values_indicator_before_intervention(current_coef))
+pacf(values_indicator_before_intervention(current_coef))
+
+auto.arima(values_indicator_before_intervention(current_coef))
+fit <- Arima(values_indicator_before_intervention(current_coef), order=c(2,2,2))
+plotPredictedVsReal(first_year(current_coef), last_year(current_coef), 2004, fit,values_indicator(current_coef) )
+
+
+GDP_PRED$Romania <- getGrowthInterventionVector(fit,current_coef)
+K_PRED$Romania[1] <- getInterventionCoeficient(fit,current_coef)
+GDP_PRED
+K_PRED
+
+####################################################################################
+################# Bulgaria
+current_coef <- GDP.Bulgaria
+
+missing_present(current_coef)
+first_year(current_coef)
+last_year(current_coef)
+
+acf(values_indicator_before_intervention(current_coef))
+pacf(values_indicator_before_intervention(current_coef))
+
+auto.arima(values_indicator_before_intervention(current_coef))
+fit <- Arima(values_indicator_before_intervention(current_coef), order=c(1,2,0))
+plotPredictedVsReal(first_year(current_coef), last_year(current_coef), 2004, fit,values_indicator(current_coef) )
+
+
+GDP_PRED$Bulgaria <- getGrowthInterventionVector(fit,current_coef)
+K_PRED$Bulgaria[1] <- getInterventionCoeficient(fit,current_coef)
+GDP_PRED
+K_PRED
+
+
+
+
+
+
+####################################################################################
 ####################################################################################
 ####################################################################################
 ####################################################################################
@@ -452,7 +556,7 @@ K_PRED
 ####################################################################################
 
 
-CPI_PRED = matrix(nrow = 5,ncol = 10)
+CPI_PRED = matrix(nrow = 5,ncol = NumberOfCountries)
 rownames(CPI_PRED) <- Yea
 colnames(CPI_PRED) <- Countr
 CPI_PRED <- as.data.frame(CPI_PRED)
@@ -669,7 +773,7 @@ K_PRED
 
 
 ####################################################################################
-################# Cyprus
+################# Malta
 
 current_coef <- CPI.Malta
 
@@ -690,6 +794,73 @@ K_PRED$Malta[2] <- getInterventionCoeficient_res(fit,current_coef)
 CPI_PRED
 K_PRED
 
+####################################################################################
+################# Croatia
+
+current_coef <- CPI.Croatia
+
+missing_present(current_coef)
+first_year(current_coef)
+last_year(current_coef)
+
+acf(values_indicator_before_intervention(current_coef))
+pacf(values_indicator_before_intervention(current_coef))
+
+auto.arima(values_indicator_before_intervention(current_coef))
+fit <- Arima(values_indicator_before_intervention(current_coef), order=c(2,2,1))
+plotPredictedVsReal(first_year(current_coef), last_year(current_coef), 2004, fit,values_indicator(current_coef) )
+
+
+CPI_PRED$Croatia<- getGrowthInterventionVector_res(fit,current_coef)
+K_PRED$Croatia[2] <- getInterventionCoeficient_res(fit,current_coef)
+CPI_PRED
+K_PRED
+
+
+####################################################################################
+################# Romania
+
+current_coef <- CPI.Romania
+
+missing_present(current_coef)
+first_year(current_coef)
+last_year(current_coef)
+
+acf(values_indicator_before_intervention(current_coef))
+pacf(values_indicator_before_intervention(current_coef))
+
+auto.arima(values_indicator_before_intervention(current_coef))
+fit <- Arima(values_indicator_before_intervention(current_coef), order=c(1,2,1))
+plotPredictedVsReal(first_year(current_coef), last_year(current_coef), 2004, fit,values_indicator(current_coef) )
+
+
+CPI_PRED$Romania<- getGrowthInterventionVector_res(fit,current_coef)
+K_PRED$Romania[2] <- getInterventionCoeficient_res(fit,current_coef)
+CPI_PRED
+K_PRED
+
+
+####################################################################################
+################# Bulgaria
+
+current_coef <- CPI.Bulgaria
+
+missing_present(current_coef)
+first_year(current_coef)
+last_year(current_coef)
+
+acf(values_indicator_before_intervention(current_coef))
+pacf(values_indicator_before_intervention(current_coef))
+
+auto.arima(values_indicator_before_intervention(current_coef))
+fit <- Arima(values_indicator_before_intervention(current_coef), order=c(2,1,1))
+plotPredictedVsReal(first_year(current_coef), last_year(current_coef), 2004, fit,values_indicator(current_coef) )
+
+
+CPI_PRED$Bulgaria<- getGrowthInterventionVector_res(fit,current_coef)
+K_PRED$Bulgaria[2] <- getInterventionCoeficient_res(fit,current_coef)
+CPI_PRED
+K_PRED
 
 ####################################################################################
 ####################################################################################
@@ -704,7 +875,7 @@ K_PRED
 ####################################################################################
 
 
-UNEMP_PRED = matrix(nrow = 5,ncol = 10)
+UNEMP_PRED = matrix(nrow = 5,ncol = NumberOfCountries)
 rownames(UNEMP_PRED) <- Yea
 colnames(UNEMP_PRED) <- Countr
 UNEMP_PRED <- as.data.frame(UNEMP_PRED)
@@ -933,7 +1104,72 @@ K_PRED$Malta[3] <- getInterventionCoeficient_res(fit,current_coef)
 UNEMP_PRED
 K_PRED
 
+####################################################################################
+####################################### Croatia
 
+current_coef <- UEmploy.Croatia
+
+missing_present(current_coef)
+first_year(current_coef)
+last_year(current_coef)
+
+acf(values_indicator_before_intervention(current_coef))
+pacf(values_indicator_before_intervention(current_coef))
+
+auto.arima(values_indicator_before_intervention(current_coef))
+fit <- Arima(values_indicator_before_intervention(current_coef), order=c(1,1,0))
+plotPredictedVsReal(first_year(current_coef), last_year(current_coef), 2004, fit,values_indicator(current_coef) )
+
+
+UNEMP_PRED$Croatia <- getGrowthInterventionVector_res(fit,current_coef)
+K_PRED$Croatia[3] <- getInterventionCoeficient_res(fit,current_coef)
+UNEMP_PRED
+K_PRED
+
+####################################################################################
+####################################### Romania
+
+current_coef <- UEmploy.Romania
+
+missing_present(current_coef)
+first_year(current_coef)
+last_year(current_coef)
+
+acf(values_indicator_before_intervention(current_coef))
+pacf(values_indicator_before_intervention(current_coef))
+
+auto.arima(values_indicator_before_intervention(current_coef))
+fit <- Arima(values_indicator_before_intervention(current_coef), order=c(2,1,2))
+plotPredictedVsReal(first_year(current_coef), last_year(current_coef), 2004, fit,values_indicator(current_coef) )
+
+
+UNEMP_PRED$Romania <- getGrowthInterventionVector_res(fit,current_coef)
+K_PRED$Romania[3] <- getInterventionCoeficient_res(fit,current_coef)
+UNEMP_PRED
+K_PRED
+
+
+####################################################################################
+####################################### Bulgaria
+
+current_coef <- UEmploy.Bulgaria
+
+missing_present(current_coef)
+first_year(current_coef)
+last_year(current_coef)
+
+acf(values_indicator_before_intervention(current_coef))
+pacf(values_indicator_before_intervention(current_coef))
+
+auto.arima(values_indicator_before_intervention(current_coef))
+fit <- Arima(values_indicator_before_intervention(current_coef), order=c(1,1,0))
+plotPredictedVsReal(first_year(current_coef), last_year(current_coef), 2004, fit,values_indicator(current_coef) )
+
+
+UNEMP_PRED$Bulgaria <- getGrowthInterventionVector_res(fit,current_coef)
+K_PRED$Bulgaria[3] <- getInterventionCoeficient_res(fit,current_coef)
+UNEMP_PRED
+K_PRED
 
 
 
@@ -953,7 +1189,7 @@ K_PRED
 ####################################################################################
 
 
-TRADE_PRED = matrix(nrow = 5,ncol = 10)
+TRADE_PRED = matrix(nrow = 5,ncol = NumberOfCountries)
 rownames(TRADE_PRED) <- Yea
 colnames(TRADE_PRED) <- Countr
 TRADE_PRED <- as.data.frame(TRADE_PRED)
@@ -1190,6 +1426,73 @@ TRADE_PRED$Malta <- getGrowthInterventionVector(fit,current_coef)
 K_PRED$Malta[4] <- getInterventionCoeficient(fit,current_coef)
 TRADE_PRED
 K_PRED
+####################################################################################
+####################################### Croatia
+
+current_coef <- Trade.Croatia
+
+missing_present(current_coef)
+first_year(current_coef)
+last_year(current_coef)
+
+acf(values_indicator_before_intervention(current_coef))
+pacf(values_indicator_before_intervention(current_coef))
+
+auto.arima(values_indicator_before_intervention(current_coef))
+fit <- Arima(values_indicator_before_intervention(current_coef), order=c(2,1,0))
+plotPredictedVsReal(first_year(current_coef), last_year(current_coef), 2004, fit,values_indicator(current_coef) )
+
+
+TRADE_PRED$Croatia <- getGrowthInterventionVector(fit,current_coef)
+K_PRED$Croatia[4] <- getInterventionCoeficient(fit,current_coef)
+TRADE_PRED
+K_PRED
+
+####################################################################################
+####################################### Romania
+
+current_coef <- Trade.Romania
+
+missing_present(current_coef)
+first_year(current_coef)
+last_year(current_coef)
+
+acf(values_indicator_before_intervention(current_coef))
+pacf(values_indicator_before_intervention(current_coef))
+
+auto.arima(values_indicator_before_intervention(current_coef))
+fit <- Arima(values_indicator_before_intervention(current_coef), order=c(2,2,0))
+plotPredictedVsReal(first_year(current_coef), last_year(current_coef), 2004, fit,values_indicator(current_coef) )
+
+
+TRADE_PRED$Romania <- getGrowthInterventionVector(fit,current_coef)
+K_PRED$Romania[4] <- getInterventionCoeficient(fit,current_coef)
+TRADE_PRED
+K_PRED
+
+
+####################################################################################
+####################################### Bulgaria
+
+current_coef <- Trade.Bulgaria
+
+missing_present(current_coef)
+first_year(current_coef)
+last_year(current_coef)
+
+acf(values_indicator_before_intervention(current_coef))
+pacf(values_indicator_before_intervention(current_coef))
+
+auto.arima(values_indicator_before_intervention(current_coef))
+fit <- Arima(values_indicator_before_intervention(current_coef), order=c(0,2,0))
+plotPredictedVsReal(first_year(current_coef), last_year(current_coef), 2004, fit,values_indicator(current_coef) )
+
+
+TRADE_PRED$Bulgaria <- getGrowthInterventionVector(fit,current_coef)
+K_PRED$Bulgaria[4] <- getInterventionCoeficient(fit,current_coef)
+TRADE_PRED
+K_PRED
+
 
 
 
@@ -1206,7 +1509,7 @@ K_PRED
 ####################################################################################
 
 
-HEALTH_PRED = matrix(nrow = 5,ncol = 10)
+HEALTH_PRED = matrix(nrow = 5,ncol = NumberOfCountries)
 rownames(HEALTH_PRED) <- Yea
 colnames(HEALTH_PRED) <- Countr
 HEALTH_PRED <- as.data.frame(HEALTH_PRED)
@@ -1432,7 +1735,102 @@ K_PRED
 ####################################################################################################################################
 ################################################################################################################
 
+####################################################################################
+####################################### Croatia
+
+current_coef <- HealthExpenditure.Croatia
+
+missing_present(current_coef)
+first_year(current_coef)
+last_year(current_coef)
+
+acf(values_indicator_before_intervention(current_coef))
+pacf(values_indicator_before_intervention(current_coef))
+
+auto.arima(values_indicator_before_intervention(current_coef))
+fit <- Arima(values_indicator_before_intervention(current_coef), order=c(2,1,1))
+plotPredictedVsReal(first_year(current_coef), last_year(current_coef), 2004, fit,values_indicator(current_coef))
 
 
+HEALTH_PRED$Croatia <- getGrowthInterventionVector(fit,current_coef)
+K_PRED$Croatia[5] <- getInterventionCoeficient(fit,current_coef)
+HEALTH_PRED
+K_PRED
+
+####################################################################################
+####################################### Romania
+
+current_coef <- HealthExpenditure.Romania
+
+missing_present(current_coef)
+first_year(current_coef)
+last_year(current_coef)
+
+acf(values_indicator_before_intervention(current_coef))
+pacf(values_indicator_before_intervention(current_coef))
+
+auto.arima(values_indicator_before_intervention(current_coef))
+fit <- Arima(values_indicator_before_intervention(current_coef), order=c(2,0,0))
+plotPredictedVsReal(first_year(current_coef), last_year(current_coef), 2004, fit,values_indicator(current_coef))
+
+
+HEALTH_PRED$Romania <- getGrowthInterventionVector(fit,current_coef)
+K_PRED$Romania[5] <- getInterventionCoeficient(fit,current_coef)
+HEALTH_PRED
+K_PRED
+
+####################################################################################
+####################################### Bulgaria
+
+current_coef <- HealthExpenditure.Bulgaria
+
+missing_present(current_coef)
+first_year(current_coef)
+last_year(current_coef)
+
+acf(values_indicator_before_intervention(current_coef))
+pacf(values_indicator_before_intervention(current_coef))
+
+auto.arima(values_indicator_before_intervention(current_coef))
+fit <- Arima(values_indicator_before_intervention(current_coef), order=c(0,0,0))
+plotPredictedVsReal(first_year(current_coef), last_year(current_coef), 2004, fit,values_indicator(current_coef))
+
+
+HEALTH_PRED$Bulgaria <- getGrowthInterventionVector(fit,current_coef)
+K_PRED$Bulgaria[5] <- getInterventionCoeficient(fit,current_coef)
+HEALTH_PRED
+K_PRED
+
+####################################################################################################################################
+################################################################################################################
+
+normalizeOverall <- function(data){
+  d1 <- data
+  for (i in 1:5) {
+    e <- data[i,] + abs(min(data[i,],na.rm = T))
+    e <- e / (max(e,na.rm = T) - min(e,na.rm = T))
+    d1[i,] <- e
+  }  
+  return(d1)
+}
+
+
+normalized <- normalizeOverall(K_PRED)
+
+betternessCoeficient <- function(data){
+  better = matrix(nrow = 1,ncol = NumberOfCountries)
+  rownames(better) <- c("Coefficient")
+  colnames(better) <- Countr
+  better <- as.data.frame(better)
+  
+  for (i in 1:NumberOfCountries) {
+    better[,i] <- sum(data[,i], na.rm = T)  
+  }
+  return(better)
+}
+
+who_is_more <- betternessCoeficient(normalized)
+
+who_is_more
 
 
