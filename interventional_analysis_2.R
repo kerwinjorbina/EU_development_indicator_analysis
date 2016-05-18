@@ -931,4 +931,254 @@ K_PRED
 
 
 
+####################################################################################
+####################################################################################
+####################################################################################
+####################################################################################
+############  
+############      Trade
+############
+####################################################################################
+####################################################################################
+####################################################################################
+####################################################################################
+
+
+TRADE_PRED = matrix(nrow = 5,ncol = 10)
+rownames(TRADE_PRED) <- Yea
+colnames(TRADE_PRED) <- Countr
+TRADE_PRED <- as.data.frame(TRADE_PRED)
+
+####################################################################################
+####################################### POLAND
+
+current_coef <- Trade.Poland
+
+missing_present(current_coef)
+first_year(current_coef)
+last_year(current_coef)
+
+acf(values_indicator_before_intervention(current_coef))
+pacf(values_indicator_before_intervention(current_coef))
+
+auto.arima(values_indicator_before_intervention(current_coef))
+fit <- Arima(values_indicator_before_intervention(current_coef), order=c(2,1,0))
+plotPredictedVsReal(first_year(current_coef), last_year(current_coef), 2004, fit,values_indicator(current_coef) )
+
+
+TRADE_PRED$Poland <- getGrowthInterventionVector(fit,current_coef)
+K_PRED$Poland[4] <- getInterventionCoeficient(fit,current_coef)
+TRADE_PRED
+K_PRED
+
+
+
+####################################################################################
+####################################### Slovenia
+
+current_coef <- Trade.Slovenia
+
+missing_present(current_coef)
+first_year(current_coef)
+last_year(current_coef)
+
+acf(values_indicator_before_intervention(current_coef))
+pacf(values_indicator_before_intervention(current_coef))
+
+auto.arima(values_indicator_before_intervention(current_coef))
+fit <- Arima(values_indicator_before_intervention(current_coef), order=c(2,1,2))
+plotPredictedVsReal(first_year(current_coef), last_year(current_coef), 2004, fit,values_indicator(current_coef) )
+
+
+TRADE_PRED$Slovenia <- getGrowthInterventionVector(fit,current_coef)
+K_PRED$Slovenia[4] <- getInterventionCoeficient(fit,current_coef)
+TRADE_PRED
+K_PRED
+
+
+####################################################################################
+####################################### Slovakia
+
+current_coef <- Trade.Slovakia
+
+missing_present(current_coef)
+first_year(current_coef)
+last_year(current_coef)
+
+acf(values_indicator_before_intervention(current_coef))
+pacf(values_indicator_before_intervention(current_coef))
+
+auto.arima(values_indicator_before_intervention(current_coef))
+fit <- Arima(values_indicator_before_intervention(current_coef), order=c(2,2,0))
+plotPredictedVsReal(first_year(current_coef), last_year(current_coef), 2004, fit,values_indicator(current_coef) )
+
+
+TRADE_PRED$Slovakia <- getGrowthInterventionVector(fit,current_coef)
+K_PRED$Slovakia[4] <- getInterventionCoeficient(fit,current_coef)
+TRADE_PRED
+K_PRED
+
+
+####################################################################################
+####################################### Lithuania
+
+current_coef <- Trade.Lithuania
+
+missing_present(current_coef)
+first_year(current_coef)
+last_year(current_coef)
+
+acf(values_indicator_before_intervention(current_coef))
+pacf(values_indicator_before_intervention(current_coef))
+
+auto.arima(values_indicator_before_intervention(current_coef))
+fit <- Arima(values_indicator_before_intervention(current_coef), order=c(2,2,0))
+plotPredictedVsReal(first_year(current_coef), last_year(current_coef), 2004, fit,values_indicator(current_coef) )
+
+
+TRADE_PRED$Lithuania <- getGrowthInterventionVector(fit,current_coef)
+K_PRED$Lithuania[4] <- getInterventionCoeficient(fit,current_coef)
+TRADE_PRED
+K_PRED
+
+
+####################################################################################
+####################################### Latvia
+
+current_coef <- Trade.Latvia
+
+missing_present(current_coef)
+first_year(current_coef)
+last_year(current_coef)
+
+acf(values_indicator_before_intervention(current_coef))
+pacf(values_indicator_before_intervention(current_coef))
+
+auto.arima(values_indicator_before_intervention(current_coef))
+fit <- Arima(values_indicator_before_intervention(current_coef), order=c(1,1,1))
+plotPredictedVsReal(first_year(current_coef), last_year(current_coef), 2004, fit,values_indicator(current_coef) )
+
+
+TRADE_PRED$Latvia <- getGrowthInterventionVector(fit,current_coef)
+K_PRED$Latvia[4] <- getInterventionCoeficient(fit,current_coef)
+TRADE_PRED
+K_PRED
+
+
+
+####################################################################################
+####################################### hUNGARY
+
+current_coef <- Trade.Hungary
+
+missing_present(current_coef)
+first_year(current_coef)
+last_year(current_coef)
+
+acf(values_indicator_before_intervention(current_coef))
+pacf(values_indicator_before_intervention(current_coef))
+
+auto.arima(values_indicator_before_intervention(current_coef))
+fit <- Arima(values_indicator_before_intervention(current_coef), order=c(0,1,0))
+plotPredictedVsReal(first_year(current_coef), last_year(current_coef), 2004, fit,values_indicator(current_coef) )
+
+
+TRADE_PRED$Hungary <- getGrowthInterventionVector(fit,current_coef)
+K_PRED$Hungary[4] <- getInterventionCoeficient(fit,current_coef)
+TRADE_PRED
+K_PRED
+
+
+####################################################################################
+####################################### Estonia
+
+current_coef <- Trade.Estonia
+
+missing_present(current_coef)
+first_year(current_coef)
+last_year(current_coef)
+
+acf(values_indicator_before_intervention(current_coef))
+pacf(values_indicator_before_intervention(current_coef))
+
+auto.arima(values_indicator_before_intervention(current_coef))
+fit <- Arima(values_indicator_before_intervention(current_coef), order=c(2,1,0))
+plotPredictedVsReal(first_year(current_coef), last_year(current_coef), 2004, fit,values_indicator(current_coef) )
+
+
+TRADE_PRED$Estonia <- getGrowthInterventionVector(fit,current_coef)
+K_PRED$Estonia[4] <- getInterventionCoeficient(fit,current_coef)
+TRADE_PRED
+K_PRED
+
+
+####################################################################################
+####################################### CzechRepublic
+
+current_coef <- Trade.CzechRepublic
+
+
+missing_present(current_coef)
+first_year(current_coef)
+last_year(current_coef)
+
+acf(values_indicator_before_intervention(current_coef))
+pacf(values_indicator_before_intervention(current_coef))
+
+auto.arima(values_indicator_before_intervention(current_coef))
+fit <- Arima(values_indicator_before_intervention(current_coef), order=c(3,1,0))
+plotPredictedVsReal(first_year(current_coef), last_year(current_coef), 2004, fit,values_indicator(current_coef) )
+
+
+TRADE_PRED$CzechRepublic <- getGrowthInterventionVector(fit,current_coef)
+K_PRED$CzechRepublic[4] <- getInterventionCoeficient(fit,current_coef)
+TRADE_PRED
+K_PRED
+
+
+####################################################################################
+####################################### Cyprus
+
+current_coef <- Trade.Cyprus
+
+
+missing_present(current_coef)
+first_year(current_coef)
+last_year(current_coef)
+
+acf(values_indicator_before_intervention(current_coef))
+pacf(values_indicator_before_intervention(current_coef))
+
+auto.arima(values_indicator_before_intervention(current_coef))
+fit <- Arima(values_indicator_before_intervention(current_coef), order=c(1,1,0))
+plotPredictedVsReal(first_year(current_coef), last_year(current_coef), 2004, fit,values_indicator(current_coef) )
+
+
+TRADE_PRED$Cyprus <- getGrowthInterventionVector(fit,current_coef)
+K_PRED$Cyprus[4] <- getInterventionCoeficient(fit,current_coef)
+TRADE_PRED
+K_PRED
+
+
+####################################################################################
+####################################### Malta
+
+current_coef <- Trade.Malta
+
+missing_present(current_coef)
+first_year(current_coef)
+last_year(current_coef)
+
+acf(values_indicator_before_intervention(current_coef))
+pacf(values_indicator_before_intervention(current_coef))
+
+auto.arima(values_indicator_before_intervention(current_coef))
+fit <- Arima(values_indicator_before_intervention(current_coef), order=c(2,1,0))
+plotPredictedVsReal(first_year(current_coef), last_year(current_coef), 2004, fit,values_indicator(current_coef) )
+
+
+TRADE_PRED$Malta <- getGrowthInterventionVector(fit,current_coef)
+K_PRED$Malta[4] <- getInterventionCoeficient(fit,current_coef)
+TRADE_PRED
+K_PRED
 
