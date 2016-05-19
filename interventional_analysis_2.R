@@ -186,7 +186,7 @@ plotPredictedVsReal <- function(startYear, endYear, intervYear, fit, val, color_
   
   
   ggplot()+
-    geom_line(data=mat,  aes(year,value), size=2, color=color_real)+
+    geom_line(data=mat,  aes(year,value), size=2, color=color_real)+ 
     geom_line(data=mat_pred, aes(year,value),size=2,  color=color_pred)
 }
 
@@ -1194,6 +1194,17 @@ rownames(TRADE_PRED) <- Yea
 colnames(TRADE_PRED) <- Countr
 TRADE_PRED <- as.data.frame(TRADE_PRED)
 
+####
+############
+###################
+#############################
+
+
+
+PLOT_NICE = matrix(nrow = 108, ncol = 4)
+colnames(PLOT_NICE) <-  c("id", "order", "Year", "Value")
+PLOT_NICE <- as.data.frame(PLOT_NICE)
+
 ####################################################################################
 ####################################### POLAND
 
@@ -1210,6 +1221,24 @@ auto.arima(values_indicator_before_intervention(current_coef))
 fit <- Arima(values_indicator_before_intervention(current_coef), order=c(2,1,0))
 plotPredictedVsReal(first_year(current_coef), last_year(current_coef), 2004, fit,values_indicator(current_coef) )
 
+PLOT_NICE
+N_CURRENT = 1
+c = subset(current_coef, Year <= 2010 & Year >= 2000)
+for (i in 1:11){
+  PLOT_NICE[i,1] = "Poland"
+  PLOT_NICE[i,2] = 1
+  PLOT_NICE[i,3] = c[i,5]
+  PLOT_NICE[i,4] = c[i,6]
+}
+N_CURRENT = N_CURRENT + 10
+Ppr <- predict(fit, n.ahead = 7)
+for (i in (1+N_CURRENT):(7+N_CURRENT)){
+  PLOT_NICE[i,1] = "Poland"
+  PLOT_NICE[i,2] = 2
+  PLOT_NICE[i,3] = c(2004:2010)[i-N_CURRENT]
+  PLOT_NICE[i,4] = Ppr$pred[i-N_CURRENT]
+}
+N_CURRENT = N_CURRENT + 7
 
 TRADE_PRED$Poland <- getGrowthInterventionVector(fit,current_coef)
 K_PRED$Poland[4] <- getInterventionCoeficient(fit,current_coef)
@@ -1286,6 +1315,28 @@ K_PRED$Lithuania[4] <- getInterventionCoeficient(fit,current_coef)
 TRADE_PRED
 K_PRED
 
+####################
+######  FOR PLOT
+
+PLOT_NICE
+c = subset(current_coef, Year <= 2010 & Year >= 2000)
+for (i in (1+N_CURRENT):(11+N_CURRENT)){
+  PLOT_NICE[i,1] = "Lithuania"
+  PLOT_NICE[i,2] = 1
+  PLOT_NICE[i,3] = c[i-N_CURRENT,5]
+  PLOT_NICE[i,4] = c[i-N_CURRENT,6]
+}
+N_CURRENT = N_CURRENT + 11
+Ppr <- predict(fit, n.ahead = 7)
+for (i in (1+N_CURRENT):(7+N_CURRENT)){
+  PLOT_NICE[i,1] = "Lithuania"
+  PLOT_NICE[i,2] = 2
+  PLOT_NICE[i,3] = c(2004:2010)[i-N_CURRENT]
+  PLOT_NICE[i,4] = Ppr$pred[i-N_CURRENT]
+}
+N_CURRENT = N_CURRENT + 7
+
+
 
 ####################################################################################
 ####################################### Latvia
@@ -1309,6 +1360,27 @@ K_PRED$Latvia[4] <- getInterventionCoeficient(fit,current_coef)
 TRADE_PRED
 K_PRED
 
+#######################
+#############
+#######     For plot
+
+PLOT_NICE
+c = subset(current_coef, Year <= 2010 & Year >= 2000)
+for (i in (1+N_CURRENT):(11+N_CURRENT)){
+  PLOT_NICE[i,1] = "Latvia"
+  PLOT_NICE[i,2] = 1
+  PLOT_NICE[i,3] = c[i-N_CURRENT,5]
+  PLOT_NICE[i,4] = c[i-N_CURRENT,6]
+}
+N_CURRENT = N_CURRENT + 11
+Ppr <- predict(fit, n.ahead = 7)
+for (i in (1+N_CURRENT):(7+N_CURRENT)){
+  PLOT_NICE[i,1] = "Latvia"
+  PLOT_NICE[i,2] = 2
+  PLOT_NICE[i,3] = c(2004:2010)[i-N_CURRENT]
+  PLOT_NICE[i,4] = Ppr$pred[i-N_CURRENT]
+}
+N_CURRENT = N_CURRENT + 7
 
 
 ####################################################################################
@@ -1355,6 +1427,29 @@ TRADE_PRED$Estonia <- getGrowthInterventionVector(fit,current_coef)
 K_PRED$Estonia[4] <- getInterventionCoeficient(fit,current_coef)
 TRADE_PRED
 K_PRED
+
+#######################
+#############
+#######     For plot
+
+PLOT_NICE
+c = subset(current_coef, Year <= 2010 & Year >= 2000)
+for (i in (1+N_CURRENT):(11+N_CURRENT)){
+  PLOT_NICE[i,1] = "Estonia"
+  PLOT_NICE[i,2] = 1
+  PLOT_NICE[i,3] = c[i-N_CURRENT,5]
+  PLOT_NICE[i,4] = c[i-N_CURRENT,6]
+}
+N_CURRENT = N_CURRENT + 11
+Ppr <- predict(fit, n.ahead = 7)
+for (i in (1+N_CURRENT):(7+N_CURRENT)){
+  PLOT_NICE[i,1] = "Estonia"
+  PLOT_NICE[i,2] = 2
+  PLOT_NICE[i,3] = c(2004:2010)[i-N_CURRENT]
+  PLOT_NICE[i,4] = Ppr$pred[i-N_CURRENT]
+}
+N_CURRENT = N_CURRENT + 7
+
 
 
 ####################################################################################
@@ -1448,6 +1543,30 @@ K_PRED$Croatia[4] <- getInterventionCoeficient(fit,current_coef)
 TRADE_PRED
 K_PRED
 
+
+#######################
+#############
+#######     For plot
+
+PLOT_NICE
+c = subset(current_coef, Year <= 2010 & Year >= 2000)
+for (i in (1+N_CURRENT):(11+N_CURRENT)){
+  PLOT_NICE[i,1] = "Croatia"
+  PLOT_NICE[i,2] = 1
+  PLOT_NICE[i,3] = c[i-N_CURRENT,5]
+  PLOT_NICE[i,4] = c[i-N_CURRENT,6]
+}
+N_CURRENT = N_CURRENT + 11
+Ppr <- predict(fit, n.ahead = 7)
+for (i in (1+N_CURRENT):(7+N_CURRENT)){
+  PLOT_NICE[i,1] = "Croatia"
+  PLOT_NICE[i,2] = 2
+  PLOT_NICE[i,3] = c(2004:2010)[i-N_CURRENT]
+  PLOT_NICE[i,4] = Ppr$pred[i-N_CURRENT]
+}
+N_CURRENT = N_CURRENT + 7
+
+
 ####################################################################################
 ####################################### Romania
 
@@ -1494,6 +1613,28 @@ TRADE_PRED
 K_PRED
 
 
+
+#######################
+#############
+#######     For plot
+
+PLOT_NICE
+c = subset(current_coef, Year <= 2010 & Year >= 2000)
+for (i in (1+N_CURRENT):(11+N_CURRENT)){
+  PLOT_NICE[i,1] = "Bulgaria"
+  PLOT_NICE[i,2] = 1
+  PLOT_NICE[i,3] = c[i-N_CURRENT,5]
+  PLOT_NICE[i,4] = c[i-N_CURRENT,6]
+}
+N_CURRENT = N_CURRENT + 11
+Ppr <- predict(fit, n.ahead = 7)
+for (i in (1+N_CURRENT):(7+N_CURRENT)){
+  PLOT_NICE[i,1] = "Bulgaria"
+  PLOT_NICE[i,2] = 2
+  PLOT_NICE[i,3] = c(2004:2010)[i-N_CURRENT]
+  PLOT_NICE[i,4] = Ppr$pred[i-N_CURRENT]
+}
+N_CURRENT = N_CURRENT + 7
 
 
 ####################################################################################
@@ -1834,3 +1975,8 @@ who_is_more <- betternessCoeficient(normalized)
 who_is_more
 
 
+write.csv(GDP_PRED, file = "GDP_PRED.csv")
+write.csv(HEALTH_PRED, file = "HEALTH_PRED.csv")
+write.csv(TRADE_PRED, file="TRADE_PRED.csv")
+write.csv(UNEMP_PRED, file="UNEMP_PRED.csv")
+write.csv(CPI_PRED, file = "CPI_PRED.csv")
