@@ -139,7 +139,7 @@ mperson <- function(x){
 dat2 <- ddply(PLOT_NICE, .(id), mperson)
 head(dat2)
 
-
+dat3<- ddply(PLOTG_NICE, .(id), mperson)
 
 # this block is run within each person and 'block (group)' of 4 rows (each polygon)
 # essentially this is to get the rows in the correct order, so that the geom_polygon function
@@ -158,10 +158,17 @@ mgroup <- function(x){
 }
 dat2 <- ddply(dat2, .(id,group), mgroup)
 head(dat2)
-
+dat3 <- ddply(dat3, .(id,group), mgroup)
 ## And here's the plot
+require(mgcv)
 ggplot(PLOT_NICE, aes(x=Year, y=Value, group=order)) + 
   geom_line(aes(colour=factor(order))) +
+  geom_point(aes(colour=factor(order))) + 
+  geom_polygon(data=dat2, aes(y=Value, group=group), alpha=0.3, fill="green") +
+  facet_wrap( ~ id)
+
+ggplot(PLOTG_NICE, aes(x=Year, y=Value, group=order)) + 
+  geom_line(aes(colour=factor(order)), lineend = "round") +
   geom_point(aes(colour=factor(order))) +
   geom_polygon(data=dat2, aes(y=Value, group=group), alpha=0.3, fill="green") +
   facet_wrap( ~ id)
