@@ -266,6 +266,12 @@ rownames(GDP_PRED) <- Yea
 colnames(GDP_PRED) <- Countr
 GDP_PRED <- as.data.frame(GDP_PRED)
 
+
+PLOTG_NICE = matrix(nrow = 108, ncol = 4)
+colnames(PLOTG_NICE) <-  c("id", "order", "Year", "Value")
+PLOTG_NICE <- as.data.frame(PLOTG_NICE)
+
+
 ####################################### POLAND
 
 missing_present(GDP.Poland)
@@ -281,6 +287,29 @@ plotPredictedVsReal(first_year(GDP.Poland), last_year(GDP.Poland), 2004, fit,val
 GDP_PRED$Poland <- getGrowthInterventionVector(fit,GDP.Poland)
 K_PRED$Poland[1] <- getInterventionCoeficient(fit,GDP.Poland)
 K_PRED
+
+####################
+######  FOR PLOT
+
+PLOTG_NICE
+N_CURRENT = 0
+c = subset(current_coef, Year <= 2010 & Year >= 2000)
+for (i in (1+N_CURRENT):(11+N_CURRENT)){
+  PLOTG_NICE[i,1] = "Poland"
+  PLOTG_NICE[i,2] = "Actual"
+  PLOTG_NICE[i,3] = c[i-N_CURRENT,5]
+  PLOTG_NICE[i,4] = c[i-N_CURRENT,6]
+}
+N_CURRENT = N_CURRENT + 11
+Ppr <- predict(fit, n.ahead = 7)
+for (i in (1+N_CURRENT):(7+N_CURRENT)){
+  PLOTG_NICE[i,1] = "Poland"
+  PLOTG_NICE[i,2] = "Predicted"
+  PLOTG_NICE[i,3] = c(2004:2010)[i-N_CURRENT]
+  PLOTG_NICE[i,4] = Ppr$pred[i-N_CURRENT]
+}
+N_CURRENT = N_CURRENT + 7
+
 
 
 current_coef <- GDP.Slovenia
@@ -343,6 +372,23 @@ K_PRED$Lithuania[1] <- getInterventionCoeficient(fit,current_coef)
 GDP_PRED
 K_PRED
 
+c = subset(current_coef, Year <= 2010 & Year >= 2000)
+for (i in (1+N_CURRENT):(11+N_CURRENT)){
+  PLOTG_NICE[i,1] = "Lithuania"
+  PLOTG_NICE[i,2] = "Actual"
+  PLOTG_NICE[i,3] = c[i-N_CURRENT,5]
+  PLOTG_NICE[i,4] = c[i-N_CURRENT,6]
+}
+N_CURRENT = N_CURRENT + 11
+Ppr <- predict(fit, n.ahead = 7)
+for (i in (1+N_CURRENT):(7+N_CURRENT)){
+  PLOTG_NICE[i,1] = "Lithuania"
+  PLOTG_NICE[i,2] = "Predicted"
+  PLOTG_NICE[i,3] = c(2004:2010)[i-N_CURRENT]
+  PLOTG_NICE[i,4] = Ppr$pred[i-N_CURRENT]
+}
+N_CURRENT = N_CURRENT + 7
+
 
 ####################################################################################
 ################# Latvia
@@ -365,6 +411,23 @@ GDP_PRED$Latvia <- getGrowthInterventionVector(fit,current_coef)
 K_PRED$Latvia[1] <- getInterventionCoeficient(fit,current_coef)
 GDP_PRED
 K_PRED
+
+c = subset(current_coef, Year <= 2010 & Year >= 2000)
+for (i in (1+N_CURRENT):(11+N_CURRENT)){
+  PLOTG_NICE[i,1] = "Latvia"
+  PLOTG_NICE[i,2] = "Actual"
+  PLOTG_NICE[i,3] = c[i-N_CURRENT,5]
+  PLOTG_NICE[i,4] = c[i-N_CURRENT,6]
+}
+N_CURRENT = N_CURRENT + 11
+Ppr <- predict(fit, n.ahead = 7)
+for (i in (1+N_CURRENT):(7+N_CURRENT)){
+  PLOTG_NICE[i,1] = "Latvia"
+  PLOTG_NICE[i,2] = "Predicted"
+  PLOTG_NICE[i,3] = c(2004:2010)[i-N_CURRENT]
+  PLOTG_NICE[i,4] = Ppr$pred[i-N_CURRENT]
+}
+N_CURRENT = N_CURRENT + 7
 
 
 ####################################################################################
@@ -411,6 +474,24 @@ GDP_PRED$Estonia <- getGrowthInterventionVector(fit,current_coef)
 K_PRED$Estonia[1] <- getInterventionCoeficient(fit,current_coef)
 GDP_PRED
 K_PRED
+
+c = subset(current_coef, Year <= 2010 & Year >= 2000)
+for (i in (1+N_CURRENT):(11+N_CURRENT)){
+  PLOTG_NICE[i,1] = "Estonia"
+  PLOTG_NICE[i,2] = "Actual"
+  PLOTG_NICE[i,3] = c[i-N_CURRENT,5]
+  PLOTG_NICE[i,4] = c[i-N_CURRENT,6]
+}
+N_CURRENT = N_CURRENT + 11
+Ppr <- predict(fit, n.ahead = 7)
+for (i in (1+N_CURRENT):(7+N_CURRENT)){
+  PLOTG_NICE[i,1] = "Estonia"
+  PLOTG_NICE[i,2] = "Predicted"
+  PLOTG_NICE[i,3] = c(2004:2010)[i-N_CURRENT]
+  PLOTG_NICE[i,4] = Ppr$pred[i-N_CURRENT]
+}
+N_CURRENT = N_CURRENT + 7
+
 
 ####################################################################################
 #################CzechRepublic
@@ -496,6 +577,24 @@ K_PRED$Croatia[1] <- getInterventionCoeficient(fit,current_coef)
 GDP_PRED
 K_PRED
 
+c = subset(current_coef, Year <= 2010 & Year >= 2000)
+for (i in (1+N_CURRENT):(11+N_CURRENT)){
+  PLOTG_NICE[i,1] = "Croatia"
+  PLOTG_NICE[i,2] = "Actual"
+  PLOTG_NICE[i,3] = c[i-N_CURRENT,5]
+  PLOTG_NICE[i,4] = c[i-N_CURRENT,6]
+}
+N_CURRENT = N_CURRENT + 11
+Ppr <- predict(fit, n.ahead = 7)
+for (i in (1+N_CURRENT):(7+N_CURRENT)){
+  PLOTG_NICE[i,1] = "Croatia"
+  PLOTG_NICE[i,2] = "Predicted"
+  PLOTG_NICE[i,3] = c(2004:2010)[i-N_CURRENT]
+  PLOTG_NICE[i,4] = Ppr$pred[i-N_CURRENT]
+}
+N_CURRENT = N_CURRENT + 7
+
+
 ####################################################################################
 ################# Romania
 current_coef <- GDP.Romania 
@@ -538,6 +637,22 @@ K_PRED$Bulgaria[1] <- getInterventionCoeficient(fit,current_coef)
 GDP_PRED
 K_PRED
 
+c = subset(current_coef, Year <= 2010 & Year >= 2000)
+for (i in (1+N_CURRENT):(11+N_CURRENT)){
+  PLOTG_NICE[i,1] = "Bulgaria"
+  PLOTG_NICE[i,2] = "Actual"
+  PLOTG_NICE[i,3] = c[i-N_CURRENT,5]
+  PLOTG_NICE[i,4] = c[i-N_CURRENT,6]
+}
+N_CURRENT = N_CURRENT + 11
+Ppr <- predict(fit, n.ahead = 7)
+for (i in (1+N_CURRENT):(7+N_CURRENT)){
+  PLOTG_NICE[i,1] = "Bulgaria"
+  PLOTG_NICE[i,2] = "Predicted"
+  PLOTG_NICE[i,3] = c(2004:2010)[i-N_CURRENT]
+  PLOTG_NICE[i,4] = Ppr$pred[i-N_CURRENT]
+}
+N_CURRENT = N_CURRENT + 7
 
 
 
@@ -1204,7 +1319,6 @@ TRADE_PRED <- as.data.frame(TRADE_PRED)
 PLOT_NICE = matrix(nrow = 108, ncol = 4)
 colnames(PLOT_NICE) <-  c("id", "order", "Year", "Value")
 PLOT_NICE <- as.data.frame(PLOT_NICE)
-
 ####################################################################################
 ####################################### POLAND
 
@@ -1226,7 +1340,7 @@ N_CURRENT = 1
 c = subset(current_coef, Year <= 2010 & Year >= 2000)
 for (i in 1:11){
   PLOT_NICE[i,1] = "Poland"
-  PLOT_NICE[i,2] = 1
+  PLOT_NICE[i,2] = "Actual"
   PLOT_NICE[i,3] = c[i,5]
   PLOT_NICE[i,4] = c[i,6]
 }
@@ -1234,7 +1348,7 @@ N_CURRENT = N_CURRENT + 10
 Ppr <- predict(fit, n.ahead = 7)
 for (i in (1+N_CURRENT):(7+N_CURRENT)){
   PLOT_NICE[i,1] = "Poland"
-  PLOT_NICE[i,2] = 2
+  PLOT_NICE[i,2] = "Predicted"
   PLOT_NICE[i,3] = c(2004:2010)[i-N_CURRENT]
   PLOT_NICE[i,4] = Ppr$pred[i-N_CURRENT]
 }
@@ -1322,7 +1436,7 @@ PLOT_NICE
 c = subset(current_coef, Year <= 2010 & Year >= 2000)
 for (i in (1+N_CURRENT):(11+N_CURRENT)){
   PLOT_NICE[i,1] = "Lithuania"
-  PLOT_NICE[i,2] = 1
+  PLOT_NICE[i,2] = "Actual"
   PLOT_NICE[i,3] = c[i-N_CURRENT,5]
   PLOT_NICE[i,4] = c[i-N_CURRENT,6]
 }
@@ -1330,7 +1444,7 @@ N_CURRENT = N_CURRENT + 11
 Ppr <- predict(fit, n.ahead = 7)
 for (i in (1+N_CURRENT):(7+N_CURRENT)){
   PLOT_NICE[i,1] = "Lithuania"
-  PLOT_NICE[i,2] = 2
+  PLOT_NICE[i,2] = "Predicted"
   PLOT_NICE[i,3] = c(2004:2010)[i-N_CURRENT]
   PLOT_NICE[i,4] = Ppr$pred[i-N_CURRENT]
 }
@@ -1368,7 +1482,7 @@ PLOT_NICE
 c = subset(current_coef, Year <= 2010 & Year >= 2000)
 for (i in (1+N_CURRENT):(11+N_CURRENT)){
   PLOT_NICE[i,1] = "Latvia"
-  PLOT_NICE[i,2] = 1
+  PLOT_NICE[i,2] = "Actual"
   PLOT_NICE[i,3] = c[i-N_CURRENT,5]
   PLOT_NICE[i,4] = c[i-N_CURRENT,6]
 }
@@ -1376,7 +1490,7 @@ N_CURRENT = N_CURRENT + 11
 Ppr <- predict(fit, n.ahead = 7)
 for (i in (1+N_CURRENT):(7+N_CURRENT)){
   PLOT_NICE[i,1] = "Latvia"
-  PLOT_NICE[i,2] = 2
+  PLOT_NICE[i,2] = "Predicted"
   PLOT_NICE[i,3] = c(2004:2010)[i-N_CURRENT]
   PLOT_NICE[i,4] = Ppr$pred[i-N_CURRENT]
 }
@@ -1436,7 +1550,7 @@ PLOT_NICE
 c = subset(current_coef, Year <= 2010 & Year >= 2000)
 for (i in (1+N_CURRENT):(11+N_CURRENT)){
   PLOT_NICE[i,1] = "Estonia"
-  PLOT_NICE[i,2] = 1
+  PLOT_NICE[i,2] = "Actual"
   PLOT_NICE[i,3] = c[i-N_CURRENT,5]
   PLOT_NICE[i,4] = c[i-N_CURRENT,6]
 }
@@ -1444,7 +1558,7 @@ N_CURRENT = N_CURRENT + 11
 Ppr <- predict(fit, n.ahead = 7)
 for (i in (1+N_CURRENT):(7+N_CURRENT)){
   PLOT_NICE[i,1] = "Estonia"
-  PLOT_NICE[i,2] = 2
+  PLOT_NICE[i,2] = "Predicted"
   PLOT_NICE[i,3] = c(2004:2010)[i-N_CURRENT]
   PLOT_NICE[i,4] = Ppr$pred[i-N_CURRENT]
 }
@@ -1552,7 +1666,7 @@ PLOT_NICE
 c = subset(current_coef, Year <= 2010 & Year >= 2000)
 for (i in (1+N_CURRENT):(11+N_CURRENT)){
   PLOT_NICE[i,1] = "Croatia"
-  PLOT_NICE[i,2] = 1
+  PLOT_NICE[i,2] = "Actual"
   PLOT_NICE[i,3] = c[i-N_CURRENT,5]
   PLOT_NICE[i,4] = c[i-N_CURRENT,6]
 }
@@ -1560,7 +1674,7 @@ N_CURRENT = N_CURRENT + 11
 Ppr <- predict(fit, n.ahead = 7)
 for (i in (1+N_CURRENT):(7+N_CURRENT)){
   PLOT_NICE[i,1] = "Croatia"
-  PLOT_NICE[i,2] = 2
+  PLOT_NICE[i,2] = "Predicted"
   PLOT_NICE[i,3] = c(2004:2010)[i-N_CURRENT]
   PLOT_NICE[i,4] = Ppr$pred[i-N_CURRENT]
 }
@@ -1622,7 +1736,7 @@ PLOT_NICE
 c = subset(current_coef, Year <= 2010 & Year >= 2000)
 for (i in (1+N_CURRENT):(11+N_CURRENT)){
   PLOT_NICE[i,1] = "Bulgaria"
-  PLOT_NICE[i,2] = 1
+  PLOT_NICE[i,2] = "Actual"
   PLOT_NICE[i,3] = c[i-N_CURRENT,5]
   PLOT_NICE[i,4] = c[i-N_CURRENT,6]
 }
@@ -1630,7 +1744,7 @@ N_CURRENT = N_CURRENT + 11
 Ppr <- predict(fit, n.ahead = 7)
 for (i in (1+N_CURRENT):(7+N_CURRENT)){
   PLOT_NICE[i,1] = "Bulgaria"
-  PLOT_NICE[i,2] = 2
+  PLOT_NICE[i,2] = "Predicted"
   PLOT_NICE[i,3] = c(2004:2010)[i-N_CURRENT]
   PLOT_NICE[i,4] = Ppr$pred[i-N_CURRENT]
 }

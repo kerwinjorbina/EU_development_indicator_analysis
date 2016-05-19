@@ -165,10 +165,10 @@ ggplot(PLOT_NICE, aes(x=Year, y=Value, group=order)) +
   geom_line(aes(colour=factor(order))) +
   geom_point(aes(colour=factor(order))) + 
   geom_polygon(data=dat2, aes(y=Value, group=group), alpha=0.3, fill="green") +
-  facet_wrap( ~ id)
+  facet_wrap( ~ id) 
 
 ggplot(PLOTG_NICE, aes(x=Year, y=Value, group=order)) + 
-  geom_line(aes(colour=factor(order)), lineend = "round") +
+  geom_line(aes(colour=factor(order))) +
   geom_point(aes(colour=factor(order))) +
   geom_polygon(data=dat2, aes(y=Value, group=group), alpha=0.3, fill="green") +
   facet_wrap( ~ id)
