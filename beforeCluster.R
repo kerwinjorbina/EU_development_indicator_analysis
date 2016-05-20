@@ -310,13 +310,10 @@ sc2Normal$cluster = as.factor(clusters$cluster)
 sc2Normal$color[sc2Normal$cluster == 1] = "red"
 sc2Normal$color[sc2Normal$cluster == 2] = "blue"
 sc2Normal$color[sc2Normal$cluster == 3] = "green"
-sc2Normal$color[sc2Normal$cluster == 4] = "violet"
 
-g <- ggplot(sc2Normal,aes(PC1,PC2,group=cluster,colour=cluster))
+g <- ggplot(sc2Normal,aes(PC1,PC2, size=4))
 g +
-  geom_point()+
-  scale_shape_manual(values=c(19,20,21))+
-  scale_colour_manual(values=c("blue", "red","green", "violet")) +
-  geom_text(aes(label=Name),color="black",size=3,hjust=1.1)
+  geom_point(aes(colour = factor(cluster)))+
+  geom_text(aes(label=Name),color="black",size=3,hjust=0, vjust=0)
 
 ggplot(sc2Normal,aes(x = PC1, y = PC2, group=cluster, colour = cluster)) + geom_point() + geom_text(aes(label=Name),color="red",size=4,hjust=1.1)

@@ -72,6 +72,11 @@ sc2NormalAfter$color[sc2NormalAfter$cluster == 1] = "red"
 sc2NormalAfter$color[sc2NormalAfter$cluster == 2] = "blue"
 sc2NormalAfter$color[sc2NormalAfter$cluster == 3] = "green"
 
+g <- ggplot(sc2NormalAfter,aes(PC1,PC2, size=4))
+g +
+  geom_point(aes(colour = factor(cluster)))+
+  geom_text(aes(label=Name),color="black",size=3,hjust=0, vjust=0)
+
 g <- ggplot(sc2NormalAfter,aes(PC1,PC2,group=cluster,colour=cluster))
 g +
   geom_point()+
