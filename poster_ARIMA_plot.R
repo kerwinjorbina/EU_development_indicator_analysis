@@ -32,96 +32,6 @@ library(gridExtra)
 library(plyr)
 theme_set(theme_bw())
 
-dat <- read.csv(textConnection(getURL("https://raw.githubusercontent.com/nzcoops/datasets/master/shading_two_lines")))
-head(dat)
-dat <- subset(dat, id == "AB")
-dat
-# this block is run within each person 
-# essentially it creates a duplicate of all rows bar the first and last two
-# and adds a grouping variable to the end
-# that way every 4 rows are will be the coords for a polygon
-
-PLOT_NICE
-
-
-mperson <- function(x){
-  x <- x[order(x$time),]
-  y <- x[-c(1,2,nrow(x)-1,nrow(x)), ]
-  x <- rbind(x,y)
-  x <- x[order(x$time),]
-  x$group <- rep(letters[1:(nrow(x)/4)], each=4)
-  return(x)
-}
-dat2 <- ddply(dat, .(id), mperson)
-head(dat2)
-
-
-
-# this block is run within each person and 'block (group)' of 4 rows (each polygon)
-# essentially this is to get the rows in the correct order, so that the geom_polygon function
-# can work clockwise to construct the polygons the correct way
-mgroup <- function(x){
-  x <- x[order(x$bgl), ]
-  left <- x[x$time == min(x$time), ]
-  right <- x[x$time == max(x$time), ]
-  if(all(left$order == right$order)){
-    left <- left[order(left$bgl, decreasing = T), ]
-    right <- right[order(right$bgl, decreasing = F), ]
-    return(rbind(left, right))
-  } else {
-    return(x[order(x$time), ])
-  } 
-}
-dat2 <- ddply(dat2, .(id,group), mgroup)
-head(dat2)
-
-## And here's the plot
-ggplot(dat, aes(x=time, y=bgl, group=order)) + 
-  geom_line(aes(colour=factor(order))) +
-  geom_point(aes(colour=factor(order))) +
-  geom_polygon(data=dat2, aes(y=bgl, group=group), alpha=0.3) +
-  facet_wrap( ~ id)
-
-
-
-As an aside, the mgroup function might seem like overkill, 
-but it was a bit tricky, as when the lines cross you have to be careful to get the right '
-hourglass' orientation, either vertical or horizontal.
-
-```{r}
-dat <- data.frame(x = c(10,10,20,20),
-                  y = c(3,4,5,2),
-                  order = c(1,2,1,2)
-)
-
-a <- ggplot(dat, aes(x=x, y=y)) + 
-  geom_line(aes(group=order)) +
-  geom_point(aes(group=order)) +
-  geom_polygon(aes(x=x, y=y), fill="red", alpha=0.2) 
-
-dat <- data.frame(x = c(10,10,20,20),
-                  y = c(3,4,2,5),
-                  order = c(1,2,1,2)
-)
-
-b <- ggplot(dat, aes(x=x, y=y)) + 
-  geom_line(aes(group=order)) +
-  geom_point(aes(group=order)) +
-  geom_polygon(aes(x=x, y=y), fill="red", alpha=0.2) 
-
-dat <- data.frame(x = c(10,20,10,20),
-                  y = c(3,4,5,2),
-                  order = c(1,2,2,1)
-)
-
-c <- ggplot(dat, aes(x=x, y=y)) + 
-  geom_line(aes(group=order)) +
-  geom_point(aes(group=order)) +
-  geom_polygon(aes(x=x, y=y), fill="red", alpha=0.2) 
-```
-
-```{r shading_plot2, fig.width=15, fig.height=5}
-grid.arrange(a,b,c, nrow=1)
 #######################################################################
 
 
@@ -140,7 +50,7 @@ dat2 <- ddply(PLOT_NICE, .(id), mperson)
 head(dat2)
 
 dat3<- ddply(PLOTG_NICE, .(id), mperson)
-
+dat4<- ddply(PLOTH_NICE, .(id), mperson)
 # this block is run within each person and 'block (group)' of 4 rows (each polygon)
 # essentially this is to get the rows in the correct order, so that the geom_polygon function
 # can work clockwise to construct the polygons the correct way
@@ -159,6 +69,8 @@ mgroup <- function(x){
 dat2 <- ddply(dat2, .(id,group), mgroup)
 head(dat2)
 dat3 <- ddply(dat3, .(id,group), mgroup)
+dat4 <- ddply(dat4, .(id,group), mgroup)
+
 ## And here's the plot
 require(mgcv)
 ggplot(PLOT_NICE, aes(x=Year, y=Value, group=order)) + 
@@ -170,5 +82,12 @@ ggplot(PLOT_NICE, aes(x=Year, y=Value, group=order)) +
 ggplot(PLOTG_NICE, aes(x=Year, y=Value, group=order)) + 
   geom_line(aes(colour=factor(order))) +
   geom_point(aes(colour=factor(order))) +
-  geom_polygon(data=dat2, aes(y=Value, group=group), alpha=0.3, fill="green") +
+  geom_polygon(data=dat3, aes(y=Value, group=group), alpha=0.3, fill="green") +
   facet_wrap( ~ id)
+plot
+
+ggplot(PLOTH_NICE, aes(x=Year, y=Value, group=order)) + 
+  geom_line(aes(colour=factor(order))) +
+  geom_point(aes(colour=factor(order))) + 
+  geom_polygon(data=dat4, aes(y=Value, group=group), alpha=0.3, fill="green") +
+  facet_wrap( ~ id) 

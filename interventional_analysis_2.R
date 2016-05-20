@@ -109,21 +109,21 @@ Trade.Bulgaria = subset(Bulgaria, IndicatorCode == "NE.TRD.GNFS.ZS")
 
 
 # Savings
-HealthExpenditure.Slovenia = subset(Slovenia, IndicatorCode == "NY.ADJ.NNAT.CD")
-HealthExpenditure.Slovakia = subset(Slovakia, IndicatorCode == "NY.ADJ.NNAT.CD")
-HealthExpenditure.Poland = subset(Poland, IndicatorCode == "NY.ADJ.NNAT.CD")
-HealthExpenditure.Malta = subset(Malta, IndicatorCode == "NY.ADJ.NNAT.CD")
-HealthExpenditure.Lithuania = subset(Lithuania, IndicatorCode == "NY.ADJ.NNAT.CD")
-HealthExpenditure.Latvia = subset(Latvia, IndicatorCode == "NY.ADJ.NNAT.CD")
-HealthExpenditure.Hungary = subset(Hungary, IndicatorCode == "NY.ADJ.NNAT.CD")
-HealthExpenditure.Estonia = subset(Estonia, IndicatorCode == "NY.ADJ.NNAT.CD")
-HealthExpenditure.CzechRepublic = subset(CzechRepublic, IndicatorCode == "NY.ADJ.NNAT.CD")
-HealthExpenditure.Cyprus = subset(Cyprus, IndicatorCode == "NY.ADJ.NNAT.CD")
+HealthExpenditure.Slovenia = subset(Slovenia, IndicatorCode == "SH.XPD.PCAP")
+HealthExpenditure.Slovakia = subset(Slovakia, IndicatorCode == "SH.XPD.PCAP")
+HealthExpenditure.Poland = subset(Poland, IndicatorCode == "SH.XPD.PCAP")
+HealthExpenditure.Malta = subset(Malta, IndicatorCode == "SH.XPD.PCAP")
+HealthExpenditure.Lithuania = subset(Lithuania, IndicatorCode == "SH.XPD.PCAP")
+HealthExpenditure.Latvia = subset(Latvia, IndicatorCode == "SH.XPD.PCAP")
+HealthExpenditure.Hungary = subset(Hungary, IndicatorCode == "SH.XPD.PCAP")
+HealthExpenditure.Estonia = subset(Estonia, IndicatorCode == "SH.XPD.PCAP")
+HealthExpenditure.CzechRepublic = subset(CzechRepublic, IndicatorCode == "SH.XPD.PCAP")
+HealthExpenditure.Cyprus = subset(Cyprus, IndicatorCode == "SH.XPD.PCAP")
 
 ## to compare with
-HealthExpenditure.Croatia = subset(Croatia, IndicatorCode == "NY.ADJ.NNAT.CD")
-HealthExpenditure.Romania = subset(Romania, IndicatorCode == "NY.ADJ.NNAT.CD")
-HealthExpenditure.Bulgaria = subset(Bulgaria, IndicatorCode == "NY.ADJ.NNAT.CD")
+HealthExpenditure.Croatia = subset(Croatia, IndicatorCode == "SH.XPD.PCAP")
+HealthExpenditure.Romania = subset(Romania, IndicatorCode == "SH.XPD.PCAP")
+HealthExpenditure.Bulgaria = subset(Bulgaria, IndicatorCode == "SH.XPD.PCAP")
 
 countriesEU = c("SVN", "SVK", "POL", "MLT", "LTU", "LVA", "HUN", "EST", "CZE", "CYP")
 indicators =c("NY.GDP.PCAP.CD", "FP.CPI.TOTL.ZG", "SL.UEM.TOTL.NE.ZS",  "NE.CON.PRVT.PP.CD", "NE.TRD.GNFS.ZS")
@@ -1314,11 +1314,11 @@ TRADE_PRED <- as.data.frame(TRADE_PRED)
 ###################
 #############################
 
-
-
-PLOT_NICE = matrix(nrow = 108, ncol = 4)
+PLOT_NICE = matrix(nrow = 90, ncol = 4)
 colnames(PLOT_NICE) <-  c("id", "order", "Year", "Value")
 PLOT_NICE <- as.data.frame(PLOT_NICE)
+
+
 ####################################################################################
 ####################################### POLAND
 
@@ -1382,7 +1382,6 @@ TRADE_PRED$Slovenia <- getGrowthInterventionVector(fit,current_coef)
 K_PRED$Slovenia[4] <- getInterventionCoeficient(fit,current_coef)
 TRADE_PRED
 K_PRED
-
 
 ####################################################################################
 ####################################### Slovakia
@@ -1756,7 +1755,7 @@ N_CURRENT = N_CURRENT + 7
 ####################################################################################
 ####################################################################################
 ############  
-############      Helth Expenditure
+############      Health Expenditure
 ############
 ####################################################################################
 ####################################################################################
@@ -1768,6 +1767,13 @@ HEALTH_PRED = matrix(nrow = 5,ncol = NumberOfCountries)
 rownames(HEALTH_PRED) <- Yea
 colnames(HEALTH_PRED) <- Countr
 HEALTH_PRED <- as.data.frame(HEALTH_PRED)
+
+
+PLOTH_NICE = matrix(nrow = 90, ncol = 4)
+colnames(PLOTH_NICE) <-  c("id", "order", "Year", "Value")
+PLOTH_NICE <- as.data.frame(PLOTH_NICE)
+
+
 
 ####################################################################################
 ####################################### POLAND
@@ -1782,7 +1788,7 @@ acf(values_indicator_before_intervention(current_coef))
 pacf(values_indicator_before_intervention(current_coef))
 
 auto.arima(values_indicator_before_intervention(current_coef))
-fit <- Arima(values_indicator_before_intervention(current_coef), order=c(1,1,2))
+fit <- Arima(values_indicator_before_intervention(current_coef), order=c(3,2,0))
 plotPredictedVsReal(first_year(current_coef), last_year(current_coef), 2004, fit,values_indicator(current_coef) )
 
 
@@ -1790,6 +1796,28 @@ HEALTH_PRED$Poland <- getGrowthInterventionVector(fit,current_coef)
 K_PRED$Poland[5] <- getInterventionCoeficient(fit,current_coef)
 HEALTH_PRED
 K_PRED
+
+########
+
+PLOTH_NICE
+N_CURRENT = 1
+c = subset(current_coef, Year <= 2010 & Year >= 2000)
+for (i in 1:11){
+  PLOTH_NICE[i,1] = "Poland"
+  PLOTH_NICE[i,2] = "Actual"
+  PLOTH_NICE[i,3] = c[i,5]
+  PLOTH_NICE[i,4] = c[i,6]
+}
+N_CURRENT = N_CURRENT + 10
+Ppr <- predict(fit, n.ahead = 7)
+for (i in (1+N_CURRENT):(7+N_CURRENT)){
+  PLOTH_NICE[i,1] = "Poland"
+  PLOTH_NICE[i,2] = "Predicted"
+  PLOTH_NICE[i,3] = c(2004:2010)[i-N_CURRENT]
+  PLOTH_NICE[i,4] = Ppr$pred[i-N_CURRENT]
+}
+N_CURRENT = N_CURRENT + 7
+
 
 
 ####################################################################################
@@ -1805,7 +1833,7 @@ acf(values_indicator_before_intervention(current_coef))
 pacf(values_indicator_before_intervention(current_coef))
 
 auto.arima(values_indicator_before_intervention(current_coef))
-fit <- Arima(values_indicator_before_intervention(current_coef), order=c(2,2,1))
+fit <- Arima(values_indicator_before_intervention(current_coef), order=c(1,2,3))
 plotPredictedVsReal(first_year(current_coef), last_year(current_coef), 2004, fit,values_indicator(current_coef) )
 
 
@@ -1828,13 +1856,13 @@ acf(values_indicator_before_intervention(current_coef))
 pacf(values_indicator_before_intervention(current_coef))
 
 auto.arima(values_indicator_before_intervention(current_coef))
-fit <- Arima(values_indicator_before_intervention(current_coef), order=c(1,2,1))
+fit <- Arima(values_indicator_before_intervention(current_coef), order=c(2,2,0))
+plotPredictedVsReal(first_year(current_coef), last_year(current_coef), 2004, fit,values_indicator(current_coef))
 
 a <- c(values_indicator(current_coef)[1:6],
   ((values_indicator(current_coef)[6]+values_indicator(current_coef)[7])/2),
   values_indicator(current_coef)[7:18])
 
-plotPredictedVsReal(first_year(current_coef), last_year(current_coef), 2004, fit,a)
 
 
 HEALTH_PRED$Slovakia <- getGrowthInterventionVector(fit,current_coef)
@@ -1851,6 +1879,47 @@ K_PRED
 
 
 
+current_coef <- HealthExpenditure.Lithuania
+
+missing_present(current_coef)
+first_year(current_coef)
+last_year(current_coef)
+
+acf(values_indicator_before_intervention(current_coef))
+pacf(values_indicator_before_intervention(current_coef))
+
+auto.arima(values_indicator_before_intervention(current_coef))
+fit <- Arima(values_indicator_before_intervention(current_coef), order=c(2,0,0))
+plotPredictedVsReal(first_year(current_coef), last_year(current_coef), 2004, fit,values_indicator(current_coef))
+
+
+
+HEALTH_PRED$Lithuania <- getGrowthInterventionVector(fit,current_coef)
+K_PRED$Lithuania[5] <- getInterventionCoeficientABS(fit,current_coef)
+HEALTH_PRED
+K_PRED
+
+
+####################
+######  FOR PLOT
+
+PLOTH_NICE
+c = subset(current_coef, Year <= 2010 & Year >= 2000)
+for (i in (1+N_CURRENT):(11+N_CURRENT)){
+  PLOTH_NICE[i,1] = "Lithuania"
+  PLOTH_NICE[i,2] = "Actual"
+  PLOTH_NICE[i,3] = c[i-N_CURRENT,5]
+  PLOTH_NICE[i,4] = c[i-N_CURRENT,6]
+}
+N_CURRENT = N_CURRENT + 11
+Ppr <- predict(fit, n.ahead = 7)
+for (i in (1+N_CURRENT):(7+N_CURRENT)){
+  PLOTH_NICE[i,1] = "Lithuania"
+  PLOTH_NICE[i,2] = "Predicted"
+  PLOTH_NICE[i,3] = c(2004:2010)[i-N_CURRENT]
+  PLOTH_NICE[i,4] = Ppr$pred[i-N_CURRENT]
+}
+N_CURRENT = N_CURRENT + 7
 ####################################################################################
 ####################################### Latvia
 
@@ -1874,6 +1943,27 @@ HEALTH_PRED
 K_PRED
 
 
+####################
+######  FOR PLOT
+
+PLOTH_NICE
+c = subset(current_coef, Year <= 2010 & Year >= 2000)
+for (i in (1+N_CURRENT):(11+N_CURRENT)){
+  PLOTH_NICE[i,1] = "Latvia"
+  PLOTH_NICE[i,2] = "Actual"
+  PLOTH_NICE[i,3] = c[i-N_CURRENT,5]
+  PLOTH_NICE[i,4] = c[i-N_CURRENT,6]
+}
+N_CURRENT = N_CURRENT + 11
+Ppr <- predict(fit, n.ahead = 7)
+for (i in (1+N_CURRENT):(7+N_CURRENT)){
+  PLOTH_NICE[i,1] = "Latvia"
+  PLOTH_NICE[i,2] = "Predicted"
+  PLOTH_NICE[i,3] = c(2004:2010)[i-N_CURRENT]
+  PLOTH_NICE[i,4] = Ppr$pred[i-N_CURRENT]
+}
+N_CURRENT = N_CURRENT + 7
+
 ####################################################################################
 ####################################### Hungary
 
@@ -1887,7 +1977,7 @@ acf(values_indicator_before_intervention(current_coef))
 pacf(values_indicator_before_intervention(current_coef))
 
 auto.arima(values_indicator_before_intervention(current_coef))
-fit <- Arima(values_indicator_before_intervention(current_coef), order=c(0,1,1))
+fit <- Arima(values_indicator_before_intervention(current_coef), order=c(2,2,5))
 plotPredictedVsReal(first_year(current_coef), last_year(current_coef), 2004, fit,values_indicator(current_coef) )
 
 
@@ -1910,7 +2000,7 @@ acf(values_indicator_before_intervention(current_coef))
 pacf(values_indicator_before_intervention(current_coef))
 
 auto.arima(values_indicator_before_intervention(current_coef))
-fit <- Arima(values_indicator_before_intervention(current_coef), order=c(1,1,2))
+fit <- Arima(values_indicator_before_intervention(current_coef), order=c(1,2,1))
 plotPredictedVsReal(first_year(current_coef), last_year(current_coef), 2004, fit,values_indicator(current_coef) )
 
 
@@ -1918,6 +2008,28 @@ HEALTH_PRED$Estonia <- getGrowthInterventionVector(fit,current_coef)
 K_PRED$Estonia[5] <- getInterventionCoeficient(fit,current_coef)
 HEALTH_PRED
 K_PRED
+
+
+####################
+######  FOR PLOT
+
+PLOTH_NICE
+c = subset(current_coef, Year <= 2010 & Year >= 2000)
+for (i in (1+N_CURRENT):(11+N_CURRENT)){
+  PLOTH_NICE[i,1] = "Estonia"
+  PLOTH_NICE[i,2] = "Actual"
+  PLOTH_NICE[i,3] = c[i-N_CURRENT,5]
+  PLOTH_NICE[i,4] = c[i-N_CURRENT,6]
+}
+N_CURRENT = N_CURRENT + 11
+Ppr <- predict(fit, n.ahead = 7)
+for (i in (1+N_CURRENT):(7+N_CURRENT)){
+  PLOTH_NICE[i,1] = "Estonia"
+  PLOTH_NICE[i,2] = "Predicted"
+  PLOTH_NICE[i,3] = c(2004:2010)[i-N_CURRENT]
+  PLOTH_NICE[i,4] = Ppr$pred[i-N_CURRENT]
+}
+N_CURRENT = N_CURRENT + 7
 
 ####################################################################################
 ####################################### CzechRepublic
@@ -1932,7 +2044,7 @@ acf(values_indicator_before_intervention(current_coef))
 pacf(values_indicator_before_intervention(current_coef))
 
 auto.arima(values_indicator_before_intervention(current_coef))
-fit <- Arima(values_indicator_before_intervention(current_coef), order=c(1,1,2))
+fit <- Arima(values_indicator_before_intervention(current_coef), order=c(0,2,0))
 plotPredictedVsReal(first_year(current_coef), last_year(current_coef), 2004, fit,values_indicator(current_coef) )
 
 
@@ -1955,7 +2067,7 @@ acf(values_indicator_before_intervention(current_coef))
 pacf(values_indicator_before_intervention(current_coef))
 
 auto.arima(values_indicator_before_intervention(current_coef))
-fit <- Arima(values_indicator_before_intervention(current_coef), order=c(1,1,0))
+fit <- Arima(values_indicator_before_intervention(current_coef), order=c(0,1,2))
 plotPredictedVsReal(first_year(current_coef), last_year(current_coef), 2004, fit,values_indicator(current_coef) )
 
 
@@ -1977,7 +2089,7 @@ acf(values_indicator_before_intervention(current_coef))
 pacf(values_indicator_before_intervention(current_coef))
 
 auto.arima(values_indicator_before_intervention(current_coef))
-fit <- Arima(values_indicator_before_intervention(current_coef), order=c(0,0,0))
+fit <- Arima(values_indicator_before_intervention(current_coef), order=c(2,2,3))
 plotPredictedVsReal(first_year(current_coef), last_year(current_coef), 2004, fit,values_indicator(current_coef))
 
 
@@ -2003,7 +2115,7 @@ acf(values_indicator_before_intervention(current_coef))
 pacf(values_indicator_before_intervention(current_coef))
 
 auto.arima(values_indicator_before_intervention(current_coef))
-fit <- Arima(values_indicator_before_intervention(current_coef), order=c(2,1,1))
+fit <- Arima(values_indicator_before_intervention(current_coef), order=c(2,2,1))
 plotPredictedVsReal(first_year(current_coef), last_year(current_coef), 2004, fit,values_indicator(current_coef))
 
 
@@ -2012,6 +2124,27 @@ K_PRED$Croatia[5] <- getInterventionCoeficient(fit,current_coef)
 HEALTH_PRED
 K_PRED
 
+
+####################
+######  FOR PLOT
+
+PLOTH_NICE
+c = subset(current_coef, Year <= 2010 & Year >= 2000)
+for (i in (1+N_CURRENT):(11+N_CURRENT)){
+  PLOTH_NICE[i,1] = "Croatia"
+  PLOTH_NICE[i,2] = "Actual"
+  PLOTH_NICE[i,3] = c[i-N_CURRENT,5]
+  PLOTH_NICE[i,4] = c[i-N_CURRENT,6]
+}
+N_CURRENT = N_CURRENT + 11
+Ppr <- predict(fit, n.ahead = 7)
+for (i in (1+N_CURRENT):(7+N_CURRENT)){
+  PLOTH_NICE[i,1] = "Croatia"
+  PLOTH_NICE[i,2] = "Predicted"
+  PLOTH_NICE[i,3] = c(2004:2010)[i-N_CURRENT]
+  PLOTH_NICE[i,4] = Ppr$pred[i-N_CURRENT]
+}
+N_CURRENT = N_CURRENT + 7
 ####################################################################################
 ####################################### Romania
 
@@ -2025,7 +2158,7 @@ acf(values_indicator_before_intervention(current_coef))
 pacf(values_indicator_before_intervention(current_coef))
 
 auto.arima(values_indicator_before_intervention(current_coef))
-fit <- Arima(values_indicator_before_intervention(current_coef), order=c(2,0,0))
+fit <- Arima(values_indicator_before_intervention(current_coef), order=c(1,2,0))
 plotPredictedVsReal(first_year(current_coef), last_year(current_coef), 2004, fit,values_indicator(current_coef))
 
 
@@ -2047,7 +2180,7 @@ acf(values_indicator_before_intervention(current_coef))
 pacf(values_indicator_before_intervention(current_coef))
 
 auto.arima(values_indicator_before_intervention(current_coef))
-fit <- Arima(values_indicator_before_intervention(current_coef), order=c(0,0,0))
+fit <- Arima(values_indicator_before_intervention(current_coef), order=c(0,2,0))
 plotPredictedVsReal(first_year(current_coef), last_year(current_coef), 2004, fit,values_indicator(current_coef))
 
 
@@ -2055,6 +2188,28 @@ HEALTH_PRED$Bulgaria <- getGrowthInterventionVector(fit,current_coef)
 K_PRED$Bulgaria[5] <- getInterventionCoeficient(fit,current_coef)
 HEALTH_PRED
 K_PRED
+
+
+####################
+######  FOR PLOT
+
+PLOTH_NICE
+c = subset(current_coef, Year <= 2010 & Year >= 2000)
+for (i in (1+N_CURRENT):(11+N_CURRENT)){
+  PLOTH_NICE[i,1] = "Bulgaria"
+  PLOTH_NICE[i,2] = "Actual"
+  PLOTH_NICE[i,3] = c[i-N_CURRENT,5]
+  PLOTH_NICE[i,4] = c[i-N_CURRENT,6]
+}
+N_CURRENT = N_CURRENT + 11
+Ppr <- predict(fit, n.ahead = 7)
+for (i in (1+N_CURRENT):(7+N_CURRENT)){
+  PLOTH_NICE[i,1] = "Bulgaria"
+  PLOTH_NICE[i,2] = "Predicted"
+  PLOTH_NICE[i,3] = c(2004:2010)[i-N_CURRENT]
+  PLOTH_NICE[i,4] = Ppr$pred[i-N_CURRENT]
+}
+N_CURRENT = N_CURRENT + 7
 
 ####################################################################################################################################
 ################################################################################################################
@@ -2084,9 +2239,89 @@ betternessCoeficient <- function(data){
   return(better)
 }
 
+
+
+
+
 who_is_more <- betternessCoeficient(normalized)
 
-who_is_more
+who_is_more <- as.data.frame(who_is_more)
+
+who = matrix(nrow = 13,ncol = 2)
+who <- as.data.frame(who)
+who[,1] <- Countr
+who[,2] <- c(as.matrix(who_is_more[1,])[1,])
+
+colnames(who) <- c("Country", "Projected growth score")
+
+ggplot(data=who, aes(x=Country, y=`Projected growth score`, fill=Country)) +
+  geom_bar(stat="identity")
+
+################################################################################################################################################
+################################################################################################################################################
+################################################################################################################################################
+########################  BAR PLOT FOR ALL 
+######################################################################## 
+########################################################################
+########################################################################
+K_PRED
+
+who_all = matrix(nrow = 13,ncol = 6)
+who_all <- as.data.frame(who_all)
+who_all[,1] <- Countr
+who_all
+who_all[,2] <- c(as.matrix(K_PRED[1,])[1,])
+who_all[,3] <- c(as.matrix(K_PRED[2,])[1,])
+who_all[,4] <- c(as.matrix(K_PRED[3,])[1,])
+who_all[,5] <- c(as.matrix(K_PRED[4,])[1,])
+who_all[,6] <- c(as.matrix(K_PRED[5,])[1,])
+colnames(who_all) <- c("Country", "GDP", "CPI","Unemployment", "Trade", "HealthExpenditure")
+
+who_all
+library(grid)
+bar1 <- ggplot(data=who_all, aes(x=Country, y=GDP, fill=Country)) + geom_bar(stat="identity")
+bar2 <- ggplot(data=who_all, aes(x=Country, y=CPI, fill=Country)) + geom_bar(stat="identity")
+bar3 <- ggplot(data=who_all, aes(x=Country, y=Unemployment, fill=Country)) + geom_bar(stat="identity")
+bar4 <- ggplot(data=who_all, aes(x=Country, y=Trade, fill=Country)) + geom_bar(stat="identity")
+bar5 <- ggplot(data=who_all, aes(x=Country, y=HealthExpenditure, fill=Country)) + geom_bar(stat="identity")
+multiplot(bar1,bar2,bar3,bar4,bar5)
+
+
+multiplot <- function(..., plotlist=NULL, file, cols=1, layout=NULL) {
+  library(grid)
+  
+  # Make a list from the ... arguments and plotlist
+  plots <- c(list(...), plotlist)
+  
+  numPlots = length(plots)
+  
+  # If layout is NULL, then use 'cols' to determine layout
+  if (is.null(layout)) {
+    # Make the panel
+    # ncol: Number of columns of plots
+    # nrow: Number of rows needed, calculated from # of cols
+    layout <- matrix(seq(1, cols * ceiling(numPlots/cols)),
+                     ncol = cols, nrow = ceiling(numPlots/cols))
+  }
+  
+  if (numPlots==1) {
+    print(plots[[1]])
+    
+  } else {
+    # Set up the page
+    grid.newpage()
+    pushViewport(viewport(layout = grid.layout(nrow(layout), ncol(layout))))
+    
+    # Make each plot, in the correct location
+    for (i in 1:numPlots) {
+      # Get the i,j matrix positions of the regions that contain this subplot
+      matchidx <- as.data.frame(which(layout == i, arr.ind = TRUE))
+      
+      print(plots[[i]], vp = viewport(layout.pos.row = matchidx$row,
+                                      layout.pos.col = matchidx$col))
+    }
+  }
+}
 
 
 write.csv(GDP_PRED, file = "GDP_PRED.csv")
