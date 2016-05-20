@@ -269,12 +269,15 @@ colnames(cdataDF2) = c("country", "GDP_Y1", "GDP_Y2", "GDP_Y3", "GDP_Y4", "GDP_Y
                       "UE_Y6", "UE_Y7", "UE_Y8", "UE_Y9", "T_Y1", "T_Y2", "T_Y3", "T_Y4", "T_Y5", "T_Y6",
                       "T_Y7", "T_Y8", "T_Y9", "H_Y1", "H_Y2", "H_Y3", "H_Y4", "H_Y5",
                       "H_Y6", "H_Y7", "H_Y8", "H_Y9")
+for(i in 1:length(countriesEU)){
+  cdataDF2[i,1] = countriesEU[i]
+}
+
 cdataDF2[,2:10] = cdataDF[1:13,3:11]
 cdataDF2[,11:19] = cdataDF[14:26,3:11]
 cdataDF2[,20:23] = cdataDF[27:39,8:11]
 cdataDF2[,24:32] = cdataDF[40:52,3:11]
 cdataDF2[,33:41] = cdataDF[53:65,3:11]
-
 
 cdataDF2Normal = cdataDF2
 cdataDF2Normal[,2:10] = normalCDataDF[1:13,3:11]
@@ -283,9 +286,7 @@ cdataDF2Normal[,20:23] = normalCDataDF[27:39,8:11]
 cdataDF2Normal[,24:32] = normalCDataDF[40:52,3:11]
 cdataDF2Normal[,33:41] = normalCDataDF[53:65,3:11]
 
-for(i in 1:length(countriesEU)){
-  cdataDF2[i,1] = countriesEU[i]
-}
+
 #write.csv(cdataDF2, file = "countriesGrowthCombined.csv")
 
 pca2 = prcomp(cdataDF2[,2:41],retx = TRUE, center = FALSE, scale.= FALSE)
@@ -298,9 +299,10 @@ ggplot(sc2,aes(x = PC1, y = PC2)) + geom_point() + geom_text(aes(label=Name),col
 
 #for normal data
 pcaNormal = prcomp(cdataDF2Normal[,2:41],retx = TRUE, center = FALSE, scale.= FALSE)
-clusters = kmeans(pcaNormal$x[,1:2], 3)
+clusters = kmeans(pcaNormal$x[,1:2], 4)
 
 #write.csv(cdataDF2Normal, file = "countriesGrowthCombinedNormal.csv")
+cdataDF2Normal = read.csv("countriesGrowthCombinedNormal.csv", header=TRUE)
 
 sc2Normal = data.frame(pcaNormal$x[,1:2])
 sc2Normal$Name = countriesEU
@@ -308,13 +310,13 @@ sc2Normal$cluster = as.factor(clusters$cluster)
 sc2Normal$color[sc2Normal$cluster == 1] = "red"
 sc2Normal$color[sc2Normal$cluster == 2] = "blue"
 sc2Normal$color[sc2Normal$cluster == 3] = "green"
+sc2Normal$color[sc2Normal$cluster == 4] = "violet"
 
 g <- ggplot(sc2Normal,aes(PC1,PC2,group=cluster,colour=cluster))
 g +
-  geom_point(aes(shape=cluster),
-             size = 4)+
+  geom_point()+
   scale_shape_manual(values=c(19,20,21))+
-  scale_colour_manual(values=c("blue", "red","green")) +
-  geom_text(aes(label=Name),color="black",size=4,hjust=1.1)
+  scale_colour_manual(values=c("blue", "red","green", "violet")) +
+  geom_text(aes(label=Name),color="black",size=3,hjust=1.1)
 
 ggplot(sc2Normal,aes(x = PC1, y = PC2, group=cluster, colour = cluster)) + geom_point() + geom_text(aes(label=Name),color="red",size=4,hjust=1.1)
