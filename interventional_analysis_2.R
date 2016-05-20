@@ -293,7 +293,7 @@ K_PRED
 
 PLOTG_NICE
 N_CURRENT = 0
-c = subset(current_coef, Year <= 2010 & Year >= 2000)
+c = subset(GDP.Poland, Year <= 2010 & Year >= 2000)
 for (i in (1+N_CURRENT):(11+N_CURRENT)){
   PLOTG_NICE[i,1] = "Poland"
   PLOTG_NICE[i,2] = "Actual"
@@ -2238,6 +2238,8 @@ betternessCoeficient <- function(data){
   }
   return(better)
 }
+
+
 
 
 

@@ -73,11 +73,14 @@ dat4 <- ddply(dat4, .(id,group), mgroup)
 
 ## And here's the plot
 require(mgcv)
+# TRADE
 ggplot(PLOT_NICE, aes(x=Year, y=Value, group=order)) + 
   geom_line(aes(colour=factor(order))) +
   geom_point(aes(colour=factor(order))) + 
   geom_polygon(data=dat2, aes(y=Value, group=group), alpha=0.3, fill="green") +
   facet_wrap( ~ id) 
+
+#GDP
 
 ggplot(PLOTG_NICE, aes(x=Year, y=Value, group=order)) + 
   geom_line(aes(colour=factor(order))) +
@@ -85,6 +88,8 @@ ggplot(PLOTG_NICE, aes(x=Year, y=Value, group=order)) +
   geom_polygon(data=dat3, aes(y=Value, group=group), alpha=0.3, fill="green") +
   facet_wrap( ~ id)
 plot
+
+#Health Expenditure
 
 ggplot(PLOTH_NICE, aes(x=Year, y=Value, group=order)) + 
   geom_line(aes(colour=factor(order))) +
