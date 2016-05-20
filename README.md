@@ -4,12 +4,30 @@ Data analysis of economic development of EU (especially for new countries) vs EE
 
 First we can take a look at these parameters (features):
 
+GDP + 
+NY.GDP.PCAP.CD
+
+CPI -
+FP.CPI.TOTL.ZG
+
+Unemployment -
+SL.UEM.TOTL.NE.ZS
+
+GINI (poverty) -
+SI.POV.GINI
+
+Trade +
+NE.TRD.GNFS.ZS
+
+Health expenditure per capita +
+SH.XPD.PCAP
+
 
 Economic coefficients:  
 
-GDP
+GDP (NY.GDP.PCAP.PP.CD)
 
-Gini
+Gini (SI.POV.GINI)
 
 Big Mac index
 
