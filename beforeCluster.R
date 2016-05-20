@@ -299,7 +299,7 @@ ggplot(sc2,aes(x = PC1, y = PC2)) + geom_point() + geom_text(aes(label=Name),col
 
 #for normal data
 pcaNormal = prcomp(cdataDF2Normal[,2:41],retx = TRUE, center = FALSE, scale.= FALSE)
-clusters = kmeans(pcaNormal$x[,1:2], 4)
+clusters = kmeans(pcaNormal$x[,1:2], 3)
 
 #write.csv(cdataDF2Normal, file = "countriesGrowthCombinedNormal.csv")
 cdataDF2Normal = read.csv("countriesGrowthCombinedNormal.csv", header=TRUE)
