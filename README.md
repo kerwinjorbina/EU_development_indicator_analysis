@@ -1,4 +1,9 @@
 # EU development indicator analysis
+
+#Results here: 
+
+https://github.com/yesanton/EU_development_indicator_analysis/blob/master/posters.pdf
+
 Data analysis of economic development of EU (especially for new countries) 
 
 
