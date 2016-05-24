@@ -1,68 +1,27 @@
-# EU-vs-EEU
-Data analysis of economic development of EU (especially for new countries) vs EEU (Eurasian Economic Union) 
+# EU development indicator analysis
+Data analysis of economic development of EU (especially for new countries) 
 
 
 First we can take a look at these parameters (features):
 
-GDP + 
+GDP (grows)
+
 NY.GDP.PCAP.CD
 
-CPI -
+CPI (should decrease)
 FP.CPI.TOTL.ZG
 
-Unemployment -
+Unemployment (should decrease)
 SL.UEM.TOTL.NE.ZS
 
-GINI (poverty) -
+GINI (poverty) (should decrease)
 SI.POV.GINI
 
-Trade +
+Trade (should increase)
 NE.TRD.GNFS.ZS
 
-Health expenditure per capita +
+Health expenditure per capita (should grow)
 SH.XPD.PCAP
-
-
-Economic coefficients:  
-
-GDP (NY.GDP.PCAP.PP.CD)
-
-Gini (SI.POV.GINI)
-
-Big Mac index
-
-Poverty line
-
-Basket stuff
-
-How much luxury you can afford
-
-Minimum salary? Benefits? Pension
-
-
-
-
-Related:
-
-Happiness index
-
-Working condition (hours?)
-
-Univesity degrees?
-
-Like expectancy
-
-Retirement age
-
-Percentage of people working in services
-
-Areas of the city?? Hmmm(national parks?) environment
-
-Tourism (increase or decrease)
-
-Number of outgoing to number of ingoing (ratio)
-
-
 
 DATA used:
 https://www.kaggle.com/worldbank/world-development-indicators/scripts
@@ -73,6 +32,7 @@ Descriptive statistics
 
 Clustering
 
+PCA analysis
 
 Time series: 
 
@@ -81,7 +41,8 @@ Time series:
 
 Regression
 
-Chow test
+
+-- Our main result will be algorithm to calculate impact score, that is the measure of how the time event (EU joining) changed the economy
 
 
--- Our main result will be algorithm to calculate impact score, that is the measure of how the time event (EU, EEU joining) changed the economy
+
