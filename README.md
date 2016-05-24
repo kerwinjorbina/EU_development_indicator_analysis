@@ -4,22 +4,23 @@ Data analysis of economic development of EU (especially for new countries)
 
 First we can take a look at these parameters (features):
 
-GDP + 
+GDP (grows)
+
 NY.GDP.PCAP.CD
 
-CPI -
+CPI (should decrease)
 FP.CPI.TOTL.ZG
 
-Unemployment -
+Unemployment (should decrease)
 SL.UEM.TOTL.NE.ZS
 
-GINI (poverty) -
+GINI (poverty) (should decrease)
 SI.POV.GINI
 
-Trade +
+Trade (should increase)
 NE.TRD.GNFS.ZS
 
-Health expenditure per capita +
+Health expenditure per capita (should grow)
 SH.XPD.PCAP
 
 DATA used:
@@ -30,6 +31,8 @@ Techniques to be used:
 Descriptive statistics
 
 Clustering
+
+PCA analysis
 
 Time series: 
 
